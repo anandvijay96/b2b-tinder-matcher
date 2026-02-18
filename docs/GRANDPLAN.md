@@ -72,15 +72,15 @@ A mobile-first B2B estimation and networking application for NMQ that connects v
 - [x] **1.1** Login screen UI (LinkedIn SSO button + Email OTP input)
 - [x] **1.2** Auth flow logic in `useAuthStore` (mock initially, Better-Auth later)
 - [x] **1.3** Auth-gated navigation: redirect unauthenticated → `(auth)/login`, authenticated → `(tabs)`
-- [ ] **1.4** Custom animated splash screen (Lottie or Reanimated)
-- [ ] **1.5** Profile Builder — Step 1: Company basics (name, website, HQ location, industry, employee range)
-- [ ] **1.6** Profile Builder — Step 2: Offerings & Needs (free-form text + category tags)
-- [ ] **1.7** Profile Builder — Step 3: Deal preferences (size, geography, engagement model)
-- [ ] **1.8** Profile Builder — Step 4: Logo upload + review & submit
-- [ ] **1.9** Profile completion indicator / progress bar component
-- [ ] **1.10** Store completed profile in `useCompanyStore` (mock persistence via AsyncStorage)
+- [x] **1.4** Custom animated splash screen (Lottie or Reanimated)
+- [x] **1.5** Profile Builder — Step 1: Company basics (name, website, HQ location, industry, employee range)
+- [x] **1.6** Profile Builder — Step 2: Offerings & Needs (free-form text + category tags)
+- [x] **1.7** Profile Builder — Step 3: Deal preferences (size, geography, engagement model)
+- [x] **1.8** Profile Builder — Step 4: Logo upload + review & submit
+- [x] **1.9** Profile completion indicator / progress bar component
+- [x] **1.10** Store completed profile in `useCompanyStore` (mock persistence via AsyncStorage)
 - [ ] **1.11** "Edit Profile" screen accessible from profile tab
-- [ ] **1.12** Form validation with Zod schemas (shared with future backend)
+- [x] **1.12** Form validation with Zod schemas (shared with future backend)
 - [ ] **1.13** Unit tests for auth store logic
 - [ ] **1.14** Git checkpoint: `feat: auth and onboarding complete`
 
@@ -407,3 +407,4 @@ B2B-Tinder/
 |---------|------------|--------------------------------------|-------|-------------|
 | 001     | 2026-02-18 | GRANDPLAN + AGENTS.md + Scaffolding  | 0     | Done        |
 | 002     | 2026-02-18 | UI Primitives + Login Screen + Compile Verify | 0–1   | Done        |
+| 003     | 2026-02-19 | Profile Builder Onboarding (4 steps) + Zod + Persistence | 1     | Done        |
