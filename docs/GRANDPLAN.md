@@ -58,20 +58,20 @@ A mobile-first B2B estimation and networking application for NMQ that connects v
 - [x] **0.6** Create design system constants: `constants/theme.ts`, `constants/Colors.ts`, `constants/index.ts`
 - [x] **0.7** Create TypeScript models: `Company`, `User`, `Intent`, `Match`, `Message`, `MeetingSlot`, `SwipeAction`
 - [x] **0.8** Create barrel exports (`index.ts`) for models, hooks, services, stores, components/ui, components/features
-- [ ] **0.9** Create UI primitives: `Button`, `Card`, `Input`, `Avatar`, `Badge`, `Pill`, `EmptyState`, `Skeleton`, `Modal`, `SectionHeader`
+- [x] **0.9** Create UI primitives: `Button`, `Card`, `Input`, `Avatar`, `Badge`, `Pill`, `EmptyState`, `Skeleton`, `Modal`, `SectionHeader`
 - [x] **0.10** Create Zustand stores: `useAuthStore`, `useCompanyStore`, `useMatchStore`, `useSwipeStore`, `useChatStore`
 - [x] **0.11** Create service stubs (returning mock data via Promises): `authService`, `companyService`, `matchService`, `swipeService`, `chatService`, `schedulingService`
 - [x] **0.12** Create hook stubs: `useAuth`, `useCompanyProfile`, `useSwipeDeck`, `useMatches`, `useChat`, `useHaptics`
 - [x] **0.13** Setup `app.json` / `eas.json` for NMQ B2B Match
-- [ ] **0.14** Verify app compiles and runs on Android/iOS simulator with blank tabs
+- [x] **0.14** Verify app compiles and runs on Android/iOS simulator with blank tabs
 - [x] **0.15** Git init, initial commit, push to remote
 
 ### Phase 1: Authentication & Onboarding ✦ Sessions 3–5
 > Goal: Users can sign up, log in, and complete a basic business profile. Auth-gated navigation works.
 
-- [ ] **1.1** Login screen UI (LinkedIn SSO button + Email OTP input)
-- [ ] **1.2** Auth flow logic in `useAuthStore` (mock initially, Better-Auth later)
-- [ ] **1.3** Auth-gated navigation: redirect unauthenticated → `(auth)/login`, authenticated → `(tabs)`
+- [x] **1.1** Login screen UI (LinkedIn SSO button + Email OTP input)
+- [x] **1.2** Auth flow logic in `useAuthStore` (mock initially, Better-Auth later)
+- [x] **1.3** Auth-gated navigation: redirect unauthenticated → `(auth)/login`, authenticated → `(tabs)`
 - [ ] **1.4** Custom animated splash screen (Lottie or Reanimated)
 - [ ] **1.5** Profile Builder — Step 1: Company basics (name, website, HQ location, industry, employee range)
 - [ ] **1.6** Profile Builder — Step 2: Offerings & Needs (free-form text + category tags)
@@ -406,3 +406,4 @@ B2B-Tinder/
 | Session | Date       | Focus                                | Phase | Status      |
 |---------|------------|--------------------------------------|-------|-------------|
 | 001     | 2026-02-18 | GRANDPLAN + AGENTS.md + Scaffolding  | 0     | Done        |
+| 002     | 2026-02-18 | UI Primitives + Login Screen + Compile Verify | 0–1   | Done        |
