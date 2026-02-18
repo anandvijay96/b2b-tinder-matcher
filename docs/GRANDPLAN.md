@@ -50,21 +50,21 @@ A mobile-first B2B estimation and networking application for NMQ that connects v
 ### Phase 0: Project Foundation & Scaffolding ✦ Sessions 1–2
 > Goal: Buildable, runnable Expo app skeleton with proven config from the reference project. All architectural patterns established. Zero business logic, but every folder, config, and pattern in place.
 
-- [ ] **0.1** Initialize Expo project (SDK 54, TypeScript strict, New Arch)
-- [ ] **0.2** Configure NativeWind v4 (babel, metro, tailwind, global.css)
-- [ ] **0.3** Configure path aliases (`@/*`) in tsconfig
-- [ ] **0.4** Setup Expo Router file structure: `(auth)`, `(tabs)`, root `_layout.tsx`
-- [ ] **0.5** Create folder scaffold: `components/ui/`, `components/features/`, `hooks/`, `services/`, `stores/`, `models/`, `constants/`, `services/mockData/`
-- [ ] **0.6** Create design system constants: `constants/theme.ts`, `constants/Colors.ts`, `constants/index.ts`
-- [ ] **0.7** Create TypeScript models: `Company`, `User`, `Intent`, `Match`, `Message`, `MeetingSlot`, `SwipeAction`
-- [ ] **0.8** Create barrel exports (`index.ts`) for models, hooks, services, stores, components/ui, components/features
+- [x] **0.1** Initialize Expo project (SDK 54, TypeScript strict, New Arch)
+- [x] **0.2** Configure NativeWind v4 (babel, metro, tailwind, global.css)
+- [x] **0.3** Configure path aliases (`@/*`) in tsconfig
+- [x] **0.4** Setup Expo Router file structure: `(auth)`, `(tabs)`, root `_layout.tsx`
+- [x] **0.5** Create folder scaffold: `components/ui/`, `components/features/`, `hooks/`, `services/`, `stores/`, `models/`, `constants/`, `services/mockData/`
+- [x] **0.6** Create design system constants: `constants/theme.ts`, `constants/Colors.ts`, `constants/index.ts`
+- [x] **0.7** Create TypeScript models: `Company`, `User`, `Intent`, `Match`, `Message`, `MeetingSlot`, `SwipeAction`
+- [x] **0.8** Create barrel exports (`index.ts`) for models, hooks, services, stores, components/ui, components/features
 - [ ] **0.9** Create UI primitives: `Button`, `Card`, `Input`, `Avatar`, `Badge`, `Pill`, `EmptyState`, `Skeleton`, `Modal`, `SectionHeader`
-- [ ] **0.10** Create Zustand stores: `useAuthStore`, `useCompanyStore`, `useMatchStore`, `useSwipeStore`, `useChatStore`
-- [ ] **0.11** Create service stubs (returning mock data via Promises): `authService`, `companyService`, `matchService`, `swipeService`, `chatService`, `schedulingService`
-- [ ] **0.12** Create hook stubs: `useAuth`, `useCompanyProfile`, `useSwipeDeck`, `useMatches`, `useChat`, `useHaptics`
-- [ ] **0.13** Setup `app.json` / `eas.json` for NMQ B2B Match
+- [x] **0.10** Create Zustand stores: `useAuthStore`, `useCompanyStore`, `useMatchStore`, `useSwipeStore`, `useChatStore`
+- [x] **0.11** Create service stubs (returning mock data via Promises): `authService`, `companyService`, `matchService`, `swipeService`, `chatService`, `schedulingService`
+- [x] **0.12** Create hook stubs: `useAuth`, `useCompanyProfile`, `useSwipeDeck`, `useMatches`, `useChat`, `useHaptics`
+- [x] **0.13** Setup `app.json` / `eas.json` for NMQ B2B Match
 - [ ] **0.14** Verify app compiles and runs on Android/iOS simulator with blank tabs
-- [ ] **0.15** Git init, initial commit, push to remote
+- [x] **0.15** Git init, initial commit, push to remote
 
 ### Phase 1: Authentication & Onboarding ✦ Sessions 3–5
 > Goal: Users can sign up, log in, and complete a basic business profile. Auth-gated navigation works.
@@ -405,4 +405,4 @@ B2B-Tinder/
 
 | Session | Date       | Focus                                | Phase | Status      |
 |---------|------------|--------------------------------------|-------|-------------|
-| 001     | 2026-02-18 | GRANDPLAN + AGENTS.md + Scaffolding  | 0     | In Progress |
+| 001     | 2026-02-18 | GRANDPLAN + AGENTS.md + Scaffolding  | 0     | Done        |
