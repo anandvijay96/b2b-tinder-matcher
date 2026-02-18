@@ -27,3 +27,24 @@ export type {
   SwipeDirection,
 } from './SwipeAction';
 export type { User, UserRole } from './User';
+
+export {
+  companyBasicsSchema,
+  offeringsNeedsSchema,
+  dealPreferencesSchema,
+  logoReviewSchema,
+  fullOnboardingSchema,
+  dealPreferencesBaseSchema,
+  INDUSTRIES,
+  EMPLOYEE_RANGES,
+  ENGAGEMENT_MODELS,
+  GEOGRAPHIES,
+  DEAL_SIZE_OPTIONS,
+} from './onboardingSchemas';
+export type {
+  CompanyBasicsForm,
+  OfferingsNeedsForm,
+  DealPreferencesForm,
+  LogoReviewForm,
+  FullOnboardingForm,
+} from './onboardingSchemas';

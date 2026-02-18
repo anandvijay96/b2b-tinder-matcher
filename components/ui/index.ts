@@ -25,5 +25,8 @@ export type { PillProps } from './Pill';
 export { CardSkeleton, Skeleton, SkeletonCircle } from './Skeleton';
 export type { CardSkeletonProps, SkeletonCircleProps, SkeletonProps } from './Skeleton';
 
+export { ProgressBar } from './ProgressBar';
+export type { ProgressBarProps } from './ProgressBar';
+
 export { SectionHeader } from './SectionHeader';
 export type { SectionHeaderProps } from './SectionHeader';

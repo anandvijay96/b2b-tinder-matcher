@@ -1,5 +1,5 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+import { DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
 import { Stack, useRouter, useSegments } from 'expo-router';
 import * as ExpoSplashScreen from 'expo-splash-screen';
@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 import 'react-native-reanimated';
 import '../global.css';
 
-import { useAuthStore } from '@/stores';
+import { useAuthStore, useCompanyStore } from '@/stores';
 
 export {
   ErrorBoundary
@@ -24,6 +24,7 @@ export default function RootLayout() {
     ...FontAwesome.font,
   });
   const { checkAuth } = useAuthStore();
+  const { loadCompany } = useCompanyStore();
 
   useEffect(() => {
     if (error) throw error;
@@ -37,7 +38,8 @@ export default function RootLayout() {
 
   useEffect(() => {
     checkAuth();
-  }, [checkAuth]);
+    loadCompany();
+  }, [checkAuth, loadCompany]);
 
   if (!loaded) {
     return null;
@@ -48,20 +50,24 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
   const { isAuthenticated, isLoading } = useAuthStore();
+  const { hasCompletedOnboarding, isLoading: companyLoading } = useCompanyStore();
   const segments = useSegments();
   const router = useRouter();
 
   useEffect(() => {
-    if (isLoading) return;
+    if (isLoading || companyLoading) return;
 
     const inAuthGroup = segments[0] === '(auth)';
+    const inOnboarding = segments.join('/').includes('onboarding');
 
     if (!isAuthenticated && !inAuthGroup) {
       router.replace('/(auth)/login');
-    } else if (isAuthenticated && inAuthGroup) {
+    } else if (isAuthenticated && !hasCompletedOnboarding && !inOnboarding) {
+      router.replace('/(auth)/onboarding/step1' as never);
+    } else if (isAuthenticated && hasCompletedOnboarding && inAuthGroup) {
       router.replace('/(tabs)');
     }
-  }, [isAuthenticated, isLoading, segments, router]);
+  }, [isAuthenticated, isLoading, hasCompletedOnboarding, companyLoading, segments, router]);
 
   return (
     <ThemeProvider value={DefaultTheme}>

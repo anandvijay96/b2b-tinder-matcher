@@ -1,4 +1,4 @@
-import type { Company } from '@/models';
+import type { Company, EngagementModel } from '@/models';
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -16,8 +16,34 @@ export const companyService = {
     return null;
   },
 
-  createCompany: async (_data: Partial<Company>): Promise<Company | null> => {
+  createCompany: async (data: Partial<Company>): Promise<Company> => {
     await delay(800);
-    return null;
+    const now = new Date().toISOString();
+    const company: Company = {
+      id: `company_${Date.now()}`,
+      legalName: data.legalName ?? '',
+      brandName: data.brandName ?? data.legalName ?? '',
+      website: data.website,
+      logoUrl: data.logoUrl,
+      hqLocation: data.hqLocation ?? '',
+      industry: data.industry ?? '',
+      employeeRange: data.employeeRange ?? '1-10',
+      description: data.description ?? '',
+      offerings: data.offerings ?? [],
+      needs: data.needs ?? [],
+      offeringSummary: data.offeringSummary ?? '',
+      needsSummary: data.needsSummary ?? '',
+      dealSizeMin: data.dealSizeMin,
+      dealSizeMax: data.dealSizeMax,
+      geographies: data.geographies ?? [],
+      engagementModels: (data.engagementModels ?? []) as EngagementModel[],
+      certifications: [],
+      verificationStatus: 'unverified',
+      verificationBadges: [],
+      responseSpeed: 'moderate',
+      createdAt: now,
+      updatedAt: now,
+    };
+    return company;
   },
 };
