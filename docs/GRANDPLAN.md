@@ -413,3 +413,4 @@ B2B-Tinder/
 | 006     | 2026-02-20 | Phase 3 complete + Phase 4 Chat (ChatBubble, chatService, useChat, chat screen) | 3–4   | Done        |
 | 007     | 2026-02-20 | Phase 4 finish (4.7 chat badge) + Phase 5 Scheduler + matches nav fix | 4–5   | Done        |
 | 008     | 2026-02-20 | Phase 6 push notifications scaffold (expo-notifications, deep links) | 6     | Done        |
+| 009     | 2026-02-20 | Frontend polish: swipe UX fixes, global KeyboardAvoidingWrapper, OTA updates | 2/4/6 | Done        |
