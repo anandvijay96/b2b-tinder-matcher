@@ -47,7 +47,11 @@
       "typedRoutes": true
     },
     "extra": {
-      "router": {}
-    }
+      "router": {},
+      "eas": {
+        "projectId": "c86b27ef-fd88-4a52-a425-3aa5fb7546b7"
+      }
+    },
+    "owner": "anandvijay96"
   }
 }
