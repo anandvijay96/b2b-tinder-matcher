@@ -91,30 +91,30 @@ A mobile-first B2B estimation and networking application for NMQ that connects v
 - [x] **2.2** `SwipeCard` component: company logo, name, industry, location, top offerings, top needs, verification badge
 - [x] **2.3** Swipe deck screen (main tab): renders stack of `SwipeCard` components
 - [x] **2.4** Swipe right (interested) / left (pass) gesture handling with PanResponder + Animated
-- [ ] **2.5** Haptic feedback on swipe actions via `expo-haptics`
-- [ ] **2.6** "Tap to expand" — full company profile modal on card tap
-- [ ] **2.7** AI explanation section on expanded card: "Why this match" bullet points
+- [x] **2.5** Haptic feedback on swipe actions via `expo-haptics`
+- [x] **2.6** "Tap to expand" — full company profile modal on card tap
+- [x] **2.7** AI explanation section on expanded card: "Why this match" bullet points
 - [x] **2.8** `useSwipeDeck` hook: fetches candidates, manages deck state, records swipe actions
 - [x] **2.9** `swipeService` with mock data: returns paginated candidate list (8 rich B2B candidates)
-- [ ] **2.10** Basic filters sheet: industry, company size, geography, verification level
-- [ ] **2.11** Filter state in `useSwipeStore` + filtered results
+- [x] **2.10** Basic filters sheet: industry, company size, geography, verification level
+- [x] **2.11** Filter state in `useSwipeStore` + filtered results
 - [x] **2.12** Empty state when no more candidates ("You've seen everyone for now!")
 - [x] **2.13** Daily swipe counter UI (free tier limit indicator)
-- [ ] **2.14** Swipe undo (premium placeholder — disabled in MVP)
-- [ ] **2.15** Super-like gesture (premium placeholder — disabled in MVP)
+- [x] **2.14** Swipe undo (premium placeholder — disabled in MVP)
+- [x] **2.15** Super-like gesture (premium placeholder — disabled in MVP)
 - [x] **2.16** Smooth card stack animation (next card peek behind current — scale 1.0/0.95/0.90 stack)
 - [ ] **2.17** Unit tests for swipe logic
-- [ ] **2.18** Git checkpoint: `feat: swipe deck discovery complete`
+- [x] **2.18** Git checkpoint: `feat: swipe deck discovery complete`
 
 ### Phase 3: Matching & Match Screen ✦ Sessions 10–11
 > Goal: Double-opt-in matching. "It's a Match!" celebration screen. Match list with status.
 
-- [ ] **3.1** Match creation logic: both parties swiped right → match
-- [ ] **3.2** "It's a Match!" animation screen (both logos, confetti/Lottie, top-3 match reasons)
-- [ ] **3.3** CTAs on match screen: "Chat Now" and "Schedule Meeting"
-- [ ] **3.4** Matches tab: list of all matches with company info, match date, last message preview
+- [x] **3.1** Match creation logic: both parties swiped right → match
+- [x] **3.2** "It's a Match!" animation screen (both logos, confetti/Lottie, top-3 match reasons)
+- [x] **3.3** CTAs on match screen: "Chat Now" and "Schedule Meeting"
+- [x] **3.4** Matches tab: list of all matches with company info, match date, last message preview
 - [ ] **3.5** Match detail screen: full company profile + match reasons + action buttons
-- [ ] **3.6** `useMatchStore` + `matchService` with mock data
+- [x] **3.6** `useMatchStore` + `matchService` with mock data
 - [ ] **3.7** Prevent duplicate matches between same company pair
 - [ ] **3.8** Match status tracking: `new` → `chatting` → `meeting_scheduled` → `completed` / `declined`
 - [ ] **3.9** Unread match indicator (badge on tab icon)
@@ -408,3 +408,5 @@ B2B-Tinder/
 | 001     | 2026-02-18 | GRANDPLAN + AGENTS.md + Scaffolding  | 0     | Done        |
 | 002     | 2026-02-18 | UI Primitives + Login Screen + Compile Verify | 0–1   | Done        |
 | 003     | 2026-02-19 | Profile Builder Onboarding (4 steps) + Zod + Persistence | 1     | Done        |
+| 004     | 2026-02-20 | SwipeCard + Swipe Deck screen + PanResponder animations | 2     | Done        |
+| 005     | 2026-02-20 | CompanyExpandModal + FiltersSheet + MatchCard + match creation | 2–3   | Done        |
