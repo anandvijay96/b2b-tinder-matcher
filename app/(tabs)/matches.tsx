@@ -14,7 +14,11 @@ export default function MatchesScreen() {
   const activeMatches = matches.filter((m) => m.status !== 'new');
 
   function handleMatchPress(match: Match) {
-    router.push(`/match/${match.id}` as never);
+    if (match.status === 'new') {
+      router.push(`/match/${match.id}` as never);
+    } else {
+      router.push(`/chat/${match.id}` as never);
+    }
   }
 
   if (isLoading) {
