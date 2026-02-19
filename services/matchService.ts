@@ -1,16 +1,17 @@
 import type { Match } from '@/models';
+import mockMatches from './mockData/matches.json';
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export const matchService = {
   getMatches: async (_companyId: string): Promise<Match[]> => {
     await delay(600);
-    return [];
+    return mockMatches as unknown as Match[];
   },
 
-  getMatch: async (_matchId: string): Promise<Match | null> => {
+  getMatch: async (matchId: string): Promise<Match | null> => {
     await delay(400);
-    return null;
+    return (mockMatches as unknown as Match[]).find((m) => m.id === matchId) ?? null;
   },
 
   createMatch: async (
