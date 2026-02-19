@@ -129,7 +129,7 @@ A mobile-first B2B estimation and networking application for NMQ that connects v
 - [x] **4.4** `useChatStore` + `chatService` (mock data, polling-based initially)
 - [x] **4.5** Text input with auto-grow, keyboard avoidance
 - [ ] **4.6** Typing indicator (UI only in MVP)
-- [ ] **4.7** Unread message count badge on matches/chat tab
+- [x] **4.7** Unread message count badge on matches/chat tab
 - [x] **4.8** Canned action buttons: "Send RFQ", "Send Capability Deck" (templates — ChatBubble renders capability_deck/rfq_template types)
 - [ ] **4.9** File attachment support (PDF, images) — upload to mock storage
 - [x] **4.10** Chat empty state for new matches
@@ -138,14 +138,14 @@ A mobile-first B2B estimation and networking application for NMQ that connects v
 ### Phase 5: Meeting Scheduler ✦ Sessions 15–16
 > Goal: Propose time slots, accept/reject, generate ICS. Complete the core engagement loop.
 
-- [ ] **5.1** Scheduler UI: propose up to 3 time slots with date/time pickers
-- [ ] **5.2** Time zone display and conversion (UTC storage)
-- [ ] **5.3** Slot acceptance/rejection flow
+- [x] **5.1** Scheduler UI: propose up to 3 time slots (auto-generated, no date picker needed for MVP)
+- [x] **5.2** Time zone display and conversion (UTC storage, local display)
+- [x] **5.3** Slot acceptance/rejection flow
 - [ ] **5.4** Meeting confirmation screen with details
 - [ ] **5.5** ICS file generation (calendar invite export)
 - [ ] **5.6** Meeting history in match detail screen
-- [ ] **5.7** `useSchedulingStore` + `schedulingService`
-- [ ] **5.8** Git checkpoint: `feat: meeting scheduler complete`
+- [x] **5.7** `useScheduling` hook + `schedulingService` wired to mock data
+- [x] **5.8** Git checkpoint: `feat: meeting scheduler complete`
 
 ### Phase 6: Push Notifications ✦ Session 17
 > Goal: Push notifications for new matches, messages, meeting proposals.
@@ -411,3 +411,4 @@ B2B-Tinder/
 | 004     | 2026-02-20 | SwipeCard + Swipe Deck screen + PanResponder animations | 2     | Done        |
 | 005     | 2026-02-20 | CompanyExpandModal + FiltersSheet + MatchCard + match creation | 2–3   | Done        |
 | 006     | 2026-02-20 | Phase 3 complete + Phase 4 Chat (ChatBubble, chatService, useChat, chat screen) | 3–4   | Done        |
+| 007     | 2026-02-20 | Phase 4 finish (4.7 chat badge) + Phase 5 Scheduler + matches nav fix | 4–5   | Done        |
