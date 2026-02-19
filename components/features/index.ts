@@ -1,5 +1,7 @@
 export { SwipeCard } from './SwipeCard';
 export type { SwipeCardProps } from './SwipeCard';
+export { ChatBubble } from './ChatBubble';
+export type { ChatBubbleProps } from './ChatBubble';
 export { CompanyExpandModal } from './CompanyExpandModal';
 export type { CompanyExpandModalProps } from './CompanyExpandModal';
 export { FiltersSheet } from './FiltersSheet';

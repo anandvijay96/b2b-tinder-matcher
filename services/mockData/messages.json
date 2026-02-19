@@ -1,0 +1,68 @@
+{
+  "match_001": [
+    {
+      "id": "msg_001_1",
+      "matchId": "match_001",
+      "senderId": "user_other_1",
+      "senderCompanyId": "comp_cloudnexus",
+      "content": "Hi! Great to connect. We've been looking for a B2B data partner with exactly your kind of capabilities.",
+      "type": "text",
+      "isRead": true,
+      "createdAt": "2026-02-18T09:00:00.000Z"
+    },
+    {
+      "id": "msg_001_2",
+      "matchId": "match_001",
+      "senderId": "user_me",
+      "senderCompanyId": "my_company",
+      "content": "Thanks for reaching out! We'd love to explore how we can support your data infrastructure needs.",
+      "type": "text",
+      "isRead": true,
+      "createdAt": "2026-02-18T09:15:00.000Z"
+    },
+    {
+      "id": "msg_001_3",
+      "matchId": "match_001",
+      "senderId": "user_other_1",
+      "senderCompanyId": "comp_cloudnexus",
+      "content": "Could you send over a capability deck? We'd like to share it with our CTO before scheduling a call.",
+      "type": "text",
+      "isRead": true,
+      "createdAt": "2026-02-18T10:30:00.000Z"
+    },
+    {
+      "id": "msg_001_4",
+      "matchId": "match_001",
+      "senderId": "user_me",
+      "senderCompanyId": "my_company",
+      "content": "Absolutely — sending our latest deck now.",
+      "type": "capability_deck",
+      "attachmentUrl": "https://example.com/deck.pdf",
+      "attachmentName": "NMQ_Capability_Deck_2026.pdf",
+      "isRead": false,
+      "createdAt": "2026-02-18T11:00:00.000Z"
+    }
+  ],
+  "match_002": [
+    {
+      "id": "msg_002_1",
+      "matchId": "match_002",
+      "senderId": "user_other_2",
+      "senderCompanyId": "comp_fintech",
+      "content": "Hello! We matched because of your logistics automation work — that's exactly what we're sourcing right now.",
+      "type": "text",
+      "isRead": true,
+      "createdAt": "2026-02-17T14:00:00.000Z"
+    },
+    {
+      "id": "msg_002_2",
+      "matchId": "match_002",
+      "senderId": "user_me",
+      "senderCompanyId": "my_company",
+      "content": "Perfect timing. We just launched a new module for financial services last quarter.",
+      "type": "text",
+      "isRead": true,
+      "createdAt": "2026-02-17T14:45:00.000Z"
+    }
+  ]
+}
