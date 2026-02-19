@@ -1,0 +1,195 @@
+[
+  {
+    "company": {
+      "id": "company_mock_001",
+      "brandName": "CloudNova Systems",
+      "legalName": "CloudNova Systems Inc.",
+      "logoUrl": null,
+      "industry": "Technology",
+      "hqLocation": "Austin, TX",
+      "employeeRange": "51-200",
+      "description": "We build enterprise-grade cloud infrastructure automation for mid-market and enterprise companies. Specialists in Kubernetes orchestration, CI/CD pipelines, and zero-downtime cloud migrations from legacy on-prem environments.",
+      "offerings": ["Cloud Migration", "DevOps Automation", "Kubernetes Orchestration", "CI/CD Pipelines"],
+      "needs": ["Sales Partnerships", "Lead Generation", "Enterprise Sales Reps"],
+      "offeringSummary": "Enterprise cloud migration and DevOps automation specialists helping companies modernise their infrastructure.",
+      "needsSummary": "Looking for sales partners to help expand our enterprise customer base in North America and Europe.",
+      "verificationBadges": ["identity-verified", "documents-verified"],
+      "responseSpeed": "fast",
+      "geographies": ["North America", "Europe"]
+    },
+    "matchReasons": [
+      { "icon": "zap", "label": "Complementary Services", "description": "Their DevOps needs align with your automation offerings" },
+      { "icon": "globe", "label": "Geography Match", "description": "Both active in North America and Europe" },
+      { "icon": "trending-up", "label": "Growth Stage", "description": "Both scaling aggressively in enterprise" }
+    ],
+    "matchScore": 92
+  },
+  {
+    "company": {
+      "id": "company_mock_002",
+      "brandName": "DataPulse Analytics",
+      "legalName": "DataPulse Analytics Ltd.",
+      "logoUrl": null,
+      "industry": "Technology",
+      "hqLocation": "London, UK",
+      "employeeRange": "11-50",
+      "description": "DataPulse turns raw business data into actionable insights through AI-powered analytics dashboards. We serve retail, logistics, and financial services clients across Europe and APAC.",
+      "offerings": ["Business Intelligence", "Data Analytics", "AI Dashboards", "Data Warehousing"],
+      "needs": ["Cloud Infrastructure", "Cybersecurity Audit", "GDPR Compliance Consulting"],
+      "offeringSummary": "AI-powered analytics and BI dashboards for retail, logistics, and financial services.",
+      "needsSummary": "Need cloud infra partners and compliance consultants to support EU expansion.",
+      "verificationBadges": ["identity-verified"],
+      "responseSpeed": "moderate",
+      "geographies": ["Europe", "Asia Pacific"]
+    },
+    "matchReasons": [
+      { "icon": "bar-chart-2", "label": "Data Synergy", "description": "Your data services complement their analytics platform" },
+      { "icon": "shield", "label": "Compliance Need", "description": "They need your GDPR and security expertise" }
+    ],
+    "matchScore": 87
+  },
+  {
+    "company": {
+      "id": "company_mock_003",
+      "brandName": "Meridian Capital Group",
+      "legalName": "Meridian Capital Group LLC",
+      "logoUrl": null,
+      "industry": "Finance & Banking",
+      "hqLocation": "New York, NY",
+      "employeeRange": "201-500",
+      "description": "Meridian provides growth equity and venture debt to B2B SaaS and fintech companies. We actively co-invest with strategic technology partners and are building our own internal digital infrastructure team.",
+      "offerings": ["Growth Equity", "Venture Debt", "Strategic Co-Investment", "Board Advisory"],
+      "needs": ["Cloud Infrastructure", "Digital Transformation", "CTO-as-a-Service"],
+      "offeringSummary": "Growth equity and venture debt for B2B SaaS and fintech, $5M–$50M tickets.",
+      "needsSummary": "Seeking technology execution partners for portfolio companies and internal digital build-out.",
+      "verificationBadges": ["identity-verified", "documents-verified", "premium-verified"],
+      "responseSpeed": "slow",
+      "geographies": ["North America", "Europe"]
+    },
+    "matchReasons": [
+      { "icon": "dollar-sign", "label": "Funding Opportunity", "description": "Active investor in tech companies like yours" },
+      { "icon": "briefcase", "label": "Strategic Value", "description": "Looking for tech partners for portfolio companies" }
+    ],
+    "matchScore": 84
+  },
+  {
+    "company": {
+      "id": "company_mock_004",
+      "brandName": "Axon Cybersecurity",
+      "legalName": "Axon Cyber Solutions GmbH",
+      "logoUrl": null,
+      "industry": "Technology",
+      "hqLocation": "Munich, Germany",
+      "employeeRange": "51-200",
+      "description": "Axon delivers managed security services, penetration testing, and SOC-as-a-service to enterprises across DACH and Benelux. ISO 27001 and SOC 2 certified. We help technology companies pass enterprise security audits.",
+      "offerings": ["Penetration Testing", "SOC-as-a-Service", "Security Audit", "Compliance Certification"],
+      "needs": ["Sales Partnerships", "Market Entry UK", "Channel Partners"],
+      "offeringSummary": "Managed security, pen testing, and SOC-as-a-service for enterprise technology companies.",
+      "needsSummary": "Expanding to UK and Nordics. Need channel sales partners with established enterprise relationships.",
+      "verificationBadges": ["identity-verified", "documents-verified"],
+      "responseSpeed": "fast",
+      "geographies": ["Europe"]
+    },
+    "matchReasons": [
+      { "icon": "shield", "label": "Security Stack", "description": "Your clients need exactly what they offer" },
+      { "icon": "map-pin", "label": "Europe Presence", "description": "Both focused on European enterprise market" }
+    ],
+    "matchScore": 81
+  },
+  {
+    "company": {
+      "id": "company_mock_005",
+      "brandName": "HealthBridge Digital",
+      "legalName": "HealthBridge Digital Solutions Inc.",
+      "logoUrl": null,
+      "industry": "Healthcare",
+      "hqLocation": "Toronto, Canada",
+      "employeeRange": "51-200",
+      "description": "HealthBridge builds HIPAA-compliant digital health platforms, patient engagement tools, and interoperability middleware for hospital networks and health insurance providers across North America.",
+      "offerings": ["Healthcare SaaS", "HIPAA Compliance Tech", "EHR Interoperability", "Patient Engagement"],
+      "needs": ["AI / Machine Learning", "Data Analytics", "Mobile Development"],
+      "offeringSummary": "HIPAA-compliant digital health platforms and EHR interoperability for enterprise health systems.",
+      "needsSummary": "Need AI and analytics partners to build predictive health models and improve patient outcomes.",
+      "verificationBadges": ["identity-verified"],
+      "responseSpeed": "moderate",
+      "geographies": ["North America"]
+    },
+    "matchReasons": [
+      { "icon": "cpu", "label": "AI Partnership", "description": "They're actively seeking AI/ML capabilities you may offer" },
+      { "icon": "smartphone", "label": "Mobile Expertise", "description": "Need mobile development partners for patient apps" }
+    ],
+    "matchScore": 78
+  },
+  {
+    "company": {
+      "id": "company_mock_006",
+      "brandName": "Nexus Logistics AI",
+      "legalName": "Nexus Logistics Intelligence Pte Ltd",
+      "logoUrl": null,
+      "industry": "Transportation & Logistics",
+      "hqLocation": "Singapore",
+      "employeeRange": "11-50",
+      "description": "Nexus builds AI-powered route optimisation and demand forecasting software for 3PL providers and freight forwarders across Southeast Asia and the Middle East.",
+      "offerings": ["Route Optimisation", "Demand Forecasting", "Supply Chain AI", "Freight Analytics"],
+      "needs": ["Cloud Infrastructure", "Sales Partnerships MENA", "System Integrators"],
+      "offeringSummary": "AI-powered supply chain optimisation and freight analytics for 3PLs and freight forwarders.",
+      "needsSummary": "Need cloud infra partners and system integrators to accelerate deployment in MENA region.",
+      "verificationBadges": ["identity-verified"],
+      "responseSpeed": "fast",
+      "geographies": ["Asia Pacific", "Middle East"]
+    },
+    "matchReasons": [
+      { "icon": "truck", "label": "Vertical Alignment", "description": "Logistics AI complements your supply chain capabilities" },
+      { "icon": "globe", "label": "APAC + MENA Growth", "description": "Both expanding into high-growth emerging markets" }
+    ],
+    "matchScore": 76
+  },
+  {
+    "company": {
+      "id": "company_mock_007",
+      "brandName": "Forge Marketing Labs",
+      "legalName": "Forge Marketing Labs Ltd.",
+      "logoUrl": null,
+      "industry": "Consulting",
+      "hqLocation": "Amsterdam, Netherlands",
+      "employeeRange": "11-50",
+      "description": "Forge is a B2B demand generation agency specialising in Account-Based Marketing (ABM), content strategy, and marketing automation for SaaS and professional services companies targeting enterprise buyers.",
+      "offerings": ["ABM Strategy", "Demand Generation", "Marketing Automation", "Content Marketing"],
+      "needs": ["Technology Partners", "CRM Integration", "Analytics Platform"],
+      "offeringSummary": "B2B demand generation and ABM specialists driving enterprise pipeline for SaaS and services companies.",
+      "needsSummary": "Looking for technology and analytics partners to strengthen our delivery and reporting capabilities.",
+      "verificationBadges": ["identity-verified"],
+      "responseSpeed": "fast",
+      "geographies": ["Europe", "North America"]
+    },
+    "matchReasons": [
+      { "icon": "target", "label": "Go-To-Market Fit", "description": "They can drive enterprise leads for your product" },
+      { "icon": "users", "label": "Partner Ecosystem", "description": "Building a tech partner network in your space" }
+    ],
+    "matchScore": 74
+  },
+  {
+    "company": {
+      "id": "company_mock_008",
+      "brandName": "GreenScale Energy",
+      "legalName": "GreenScale Energy Solutions AS",
+      "logoUrl": null,
+      "industry": "Energy & Utilities",
+      "hqLocation": "Oslo, Norway",
+      "employeeRange": "51-200",
+      "description": "GreenScale develops software for renewable energy asset management, grid balancing, and carbon tracking. Our platform is used by utilities and energy traders across Scandinavia and Germany.",
+      "offerings": ["Energy Asset Management", "Carbon Tracking", "Grid Optimisation SaaS", "ESG Reporting"],
+      "needs": ["AI / Machine Learning", "Cybersecurity", "Cloud Migration"],
+      "offeringSummary": "Renewable energy asset management and carbon tracking software for utilities and energy traders.",
+      "needsSummary": "Need AI partners for predictive grid analytics and security partners for critical infrastructure hardening.",
+      "verificationBadges": ["identity-verified", "documents-verified"],
+      "responseSpeed": "moderate",
+      "geographies": ["Europe"]
+    },
+    "matchReasons": [
+      { "icon": "leaf", "label": "ESG Alignment", "description": "Sustainability-focused partner with complementary tech needs" },
+      { "icon": "cpu", "label": "AI Opportunity", "description": "Actively seeking AI partners for grid analytics" }
+    ],
+    "matchScore": 71
+  }
+]
