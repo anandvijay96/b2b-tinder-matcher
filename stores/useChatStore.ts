@@ -1,6 +1,8 @@
 import type { Message } from '@/models';
 import { create } from 'zustand';
 
+const MY_USER_ID = 'user_me';
+
 interface ChatState {
   messages: Record<string, Message[]>;
   isLoading: boolean;
@@ -9,6 +11,7 @@ interface ChatState {
   addMessage: (matchId: string, message: Message) => void;
   getMessages: (matchId: string) => Message[];
   markAsRead: (matchId: string) => void;
+  getTotalUnreadMessages: () => number;
 }
 
 export const useChatStore = create<ChatState>((set, get) => ({
@@ -43,6 +46,16 @@ export const useChatStore = create<ChatState>((set, get) => ({
         })),
       },
     })),
+
+  getTotalUnreadMessages: () => {
+    const { messages } = get();
+    return Object.values(messages).reduce(
+      (total, msgs) =>
+        total +
+        msgs.filter((m) => !m.isRead && m.senderId !== MY_USER_ID).length,
+      0
+    );
+  },
 }));
 
 export default useChatStore;
