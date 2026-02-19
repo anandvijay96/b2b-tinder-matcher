@@ -1,12 +1,14 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
+import * as Notifications from 'expo-notifications';
 import { Stack, useRouter, useSegments } from 'expo-router';
 import * as ExpoSplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import 'react-native-reanimated';
 import '../global.css';
 
+import { notificationService } from '@/services';
 import { useAuthStore, useCompanyStore } from '@/stores';
 
 export {
@@ -25,6 +27,9 @@ export default function RootLayout() {
   });
   const { checkAuth } = useAuthStore();
   const { loadCompany } = useCompanyStore();
+  useEffect(() => {
+    notificationService.registerForPushNotifications();
+  }, []);
 
   useEffect(() => {
     if (error) throw error;
@@ -53,6 +58,30 @@ function RootLayoutNav() {
   const { hasCompletedOnboarding, isLoading: companyLoading } = useCompanyStore();
   const segments = useSegments();
   const router = useRouter();
+  const notificationListener = useRef<Notifications.EventSubscription | null>(null);
+  const responseListener = useRef<Notifications.EventSubscription | null>(null);
+
+  useEffect(() => {
+    notificationListener.current = Notifications.addNotificationReceivedListener(
+      (_notification) => {}
+    );
+    responseListener.current = Notifications.addNotificationResponseReceivedListener(
+      (response) => {
+        const data = response.notification.request.content.data as Record<string, string>;
+        if (data?.type === 'new_match' && data?.matchId) {
+          router.push(`/match/${data.matchId}` as never);
+        } else if (data?.type === 'new_message' && data?.matchId) {
+          router.push(`/chat/${data.matchId}` as never);
+        } else if (data?.type === 'meeting_proposal' && data?.matchId) {
+          router.push(`/schedule/${data.matchId}` as never);
+        }
+      }
+    );
+    return () => {
+      notificationListener.current?.remove();
+      responseListener.current?.remove();
+    };
+  }, [router]);
 
   useEffect(() => {
     if (isLoading || companyLoading) return;
