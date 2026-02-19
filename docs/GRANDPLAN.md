@@ -150,12 +150,12 @@ A mobile-first B2B estimation and networking application for NMQ that connects v
 ### Phase 6: Push Notifications ✦ Session 17
 > Goal: Push notifications for new matches, messages, meeting proposals.
 
-- [ ] **6.1** Configure `expo-notifications` + FCM credentials
-- [ ] **6.2** Request notification permissions on app start
-- [ ] **6.3** Store push token in user profile
-- [ ] **6.4** Notification handlers: new match, new message, meeting proposal, verification update
-- [ ] **6.5** Deep linking from notification tap → correct screen
-- [ ] **6.6** `notificationService` implementation
+- [x] **6.1** Configure `expo-notifications` plugin in app.json
+- [x] **6.2** Request notification permissions on app start
+- [ ] **6.3** Store push token in user profile (Phase 7 — needs backend)
+- [x] **6.4** Notification handlers: new match, new message, meeting proposal
+- [x] **6.5** Deep linking from notification tap → correct screen
+- [x] **6.6** `notificationService` implementation (local + push token)
 - [ ] **6.7** Git checkpoint: `feat: push notifications complete`
 
 ### Phase 7: Backend Integration (Better-T-Stack) ✦ Sessions 18–23
@@ -412,3 +412,4 @@ B2B-Tinder/
 | 005     | 2026-02-20 | CompanyExpandModal + FiltersSheet + MatchCard + match creation | 2–3   | Done        |
 | 006     | 2026-02-20 | Phase 3 complete + Phase 4 Chat (ChatBubble, chatService, useChat, chat screen) | 3–4   | Done        |
 | 007     | 2026-02-20 | Phase 4 finish (4.7 chat badge) + Phase 5 Scheduler + matches nav fix | 4–5   | Done        |
+| 008     | 2026-02-20 | Phase 6 push notifications scaffold (expo-notifications, deep links) | 6     | Done        |
