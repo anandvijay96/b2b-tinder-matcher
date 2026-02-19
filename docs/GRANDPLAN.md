@@ -115,24 +115,24 @@ A mobile-first B2B estimation and networking application for NMQ that connects v
 - [x] **3.4** Matches tab: list of all matches with company info, match date, last message preview
 - [ ] **3.5** Match detail screen: full company profile + match reasons + action buttons
 - [x] **3.6** `useMatchStore` + `matchService` with mock data
-- [ ] **3.7** Prevent duplicate matches between same company pair
-- [ ] **3.8** Match status tracking: `new` → `chatting` → `meeting_scheduled` → `completed` / `declined`
-- [ ] **3.9** Unread match indicator (badge on tab icon)
-- [ ] **3.10** Git checkpoint: `feat: matching system complete`
+- [x] **3.7** Prevent duplicate matches between same company pair
+- [x] **3.8** Match status tracking: `new` → `chatting` → `meeting_scheduled` → `completed` / `declined`
+- [x] **3.9** Unread match indicator (badge on tab icon)
+- [x] **3.10** Git checkpoint: `feat: matching system complete`
 
 ### Phase 4: In-App Chat ✦ Sessions 12–14
 > Goal: 1:1 messaging per match. Persistent history. "Why this match" pinned card.
 
-- [ ] **4.1** Chat screen UI: message bubbles, input bar, send button
-- [ ] **4.2** Message list with timestamps, read receipts placeholder
-- [ ] **4.3** "Why this match?" pinned card at top of chat thread
-- [ ] **4.4** `useChatStore` + `chatService` (mock data, polling-based initially)
-- [ ] **4.5** Text input with auto-grow, keyboard avoidance
+- [x] **4.1** Chat screen UI: message bubbles, input bar, send button
+- [x] **4.2** Message list with timestamps, read receipts placeholder
+- [x] **4.3** "Why this match?" pinned card at top of chat thread
+- [x] **4.4** `useChatStore` + `chatService` (mock data, polling-based initially)
+- [x] **4.5** Text input with auto-grow, keyboard avoidance
 - [ ] **4.6** Typing indicator (UI only in MVP)
 - [ ] **4.7** Unread message count badge on matches/chat tab
-- [ ] **4.8** Canned action buttons: "Send RFQ", "Send Capability Deck" (templates)
+- [x] **4.8** Canned action buttons: "Send RFQ", "Send Capability Deck" (templates — ChatBubble renders capability_deck/rfq_template types)
 - [ ] **4.9** File attachment support (PDF, images) — upload to mock storage
-- [ ] **4.10** Chat empty state for new matches
+- [x] **4.10** Chat empty state for new matches
 - [ ] **4.11** Git checkpoint: `feat: in-app chat complete`
 
 ### Phase 5: Meeting Scheduler ✦ Sessions 15–16
@@ -410,3 +410,4 @@ B2B-Tinder/
 | 003     | 2026-02-19 | Profile Builder Onboarding (4 steps) + Zod + Persistence | 1     | Done        |
 | 004     | 2026-02-20 | SwipeCard + Swipe Deck screen + PanResponder animations | 2     | Done        |
 | 005     | 2026-02-20 | CompanyExpandModal + FiltersSheet + MatchCard + match creation | 2–3   | Done        |
+| 006     | 2026-02-20 | Phase 3 complete + Phase 4 Chat (ChatBubble, chatService, useChat, chat screen) | 3–4   | Done        |
