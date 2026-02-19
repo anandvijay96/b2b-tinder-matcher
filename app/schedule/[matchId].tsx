@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { ArrowLeft, Calendar, Check, Clock } from 'lucide-react-native';
+import { ArrowLeft, Calendar, Check, Clock, MessageCircle, PartyPopper } from 'lucide-react-native';
 import { useState } from 'react';
 import { useScheduling } from '@/hooks';
 import { useMatchStore } from '@/stores';
@@ -133,6 +133,38 @@ export default function ScheduleScreen() {
           showsVerticalScrollIndicator={false}
           contentContainerStyle={{ padding: 20, paddingBottom: 40 }}
         >
+          {/* Meeting confirmed banner */}
+          {activeMeeting?.status === 'accepted' && activeMeeting.selectedSlotId && (() => {
+            const confirmedSlot = activeMeeting.slots.find(
+              (s) => s.id === activeMeeting.selectedSlotId
+            );
+            return confirmedSlot ? (
+              <View className="bg-success/10 border border-success/30 rounded-2xl p-5 mb-5 items-center">
+                <View className="w-14 h-14 rounded-full bg-success/20 items-center justify-center mb-3">
+                  <PartyPopper size={26} color="#22C55E" />
+                </View>
+                <Text className="text-bodyMedium text-success font-bold text-center mb-1">
+                  Meeting Confirmed!
+                </Text>
+                <Text className="text-captionMedium text-textPrimary font-semibold text-center mb-0.5">
+                  {formatSlot(confirmedSlot)}
+                </Text>
+                <Text className="text-small text-textMuted text-center mb-4">
+                  {confirmedSlot.timezone.replace('_', ' ')}
+                </Text>
+                <Pressable
+                  onPress={() => router.replace(`/chat/${matchId}` as never)}
+                  className="flex-row items-center gap-2 h-11 px-6 rounded-xl bg-primary"
+                >
+                  <MessageCircle size={16} color="#fff" />
+                  <Text className="text-captionMedium text-textInverse font-semibold">
+                    Go to Chat
+                  </Text>
+                </Pressable>
+              </View>
+            ) : null;
+          })()}
+
           {/* Active meeting */}
           {activeMeeting ? (
             <View className="bg-bgSurface rounded-2xl border border-borderLight p-4 mb-5">
@@ -140,7 +172,7 @@ export default function ScheduleScreen() {
                 <View className="flex-row items-center gap-1.5">
                   <Calendar size={14} color="#1E3A5F" />
                   <Text className="text-captionMedium text-textPrimary font-semibold">
-                    Meeting proposal
+                    {activeMeeting.status === 'accepted' ? 'Confirmed meeting' : 'Meeting proposal'}
                   </Text>
                 </View>
                 <View
