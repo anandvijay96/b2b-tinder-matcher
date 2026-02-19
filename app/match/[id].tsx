@@ -152,7 +152,7 @@ export default function MatchCelebrationScreen() {
         {/* CTAs */}
         <Animated.View style={ctaStyle} className="mx-5 gap-3 mt-2">
           <Pressable
-            onPress={() => router.replace('/(tabs)/chat')}
+            onPress={() => router.replace(`/chat/${id}` as never)}
             className="h-14 rounded-2xl bg-white flex-row items-center justify-center gap-2"
           >
             <MessageCircle size={20} color="#1E3A5F" />

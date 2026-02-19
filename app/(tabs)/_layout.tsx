@@ -1,6 +1,8 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Tabs } from 'expo-router';
 import { ComponentProps } from 'react';
+import { Text, View } from 'react-native';
+import { useMatchStore } from '@/stores';
 
 function TabBarIcon(props: {
   name: ComponentProps<typeof FontAwesome>['name'];
@@ -9,7 +11,34 @@ function TabBarIcon(props: {
   return <FontAwesome size={24} style={{ marginBottom: -3 }} {...props} />;
 }
 
+function UnreadBadge({ count }: { count: number }) {
+  if (count === 0) return null;
+  return (
+    <View
+      style={{
+        position: 'absolute',
+        top: -4,
+        right: -8,
+        backgroundColor: '#EF4444',
+        borderRadius: 8,
+        minWidth: 16,
+        height: 16,
+        alignItems: 'center',
+        justifyContent: 'center',
+        paddingHorizontal: 3,
+      }}
+    >
+      <Text style={{ color: '#fff', fontSize: 10, fontWeight: '700' }}>
+        {count > 99 ? '99+' : count}
+      </Text>
+    </View>
+  );
+}
+
 export default function TabLayout() {
+  const getTotalUnread = useMatchStore((s) => s.getTotalUnread);
+  const totalUnread = getTotalUnread();
+
   return (
     <Tabs
       screenOptions={{
@@ -41,7 +70,12 @@ export default function TabLayout() {
         name="matches"
         options={{
           title: 'Matches',
-          tabBarIcon: ({ color }) => <TabBarIcon name="handshake-o" color={color} />,
+          tabBarIcon: ({ color }) => (
+            <View>
+              <TabBarIcon name="handshake-o" color={color} />
+              <UnreadBadge count={totalUnread} />
+            </View>
+          ),
         }}
       />
       <Tabs.Screen

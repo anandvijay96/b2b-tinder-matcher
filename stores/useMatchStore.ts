@@ -10,6 +10,7 @@ interface MatchState {
   addMatch: (match: Match) => void;
   selectMatch: (match: Match | null) => void;
   updateMatchStatus: (matchId: string, status: Match['status']) => void;
+  markMatchRead: (matchId: string) => void;
   getTotalUnread: () => number;
 }
 
@@ -22,7 +23,15 @@ export const useMatchStore = create<MatchState>((set, get) => ({
   setMatches: (matches: Match[]) => set({ matches }),
 
   addMatch: (match: Match) =>
-    set((state) => ({ matches: [match, ...state.matches] })),
+    set((state) => {
+      const alreadyExists = state.matches.some(
+        (m) =>
+          (m.companyAId === match.companyAId && m.companyBId === match.companyBId) ||
+          (m.companyAId === match.companyBId && m.companyBId === match.companyAId)
+      );
+      if (alreadyExists) return state;
+      return { matches: [match, ...state.matches] };
+    }),
 
   selectMatch: (match: Match | null) => set({ selectedMatch: match }),
 
@@ -30,6 +39,13 @@ export const useMatchStore = create<MatchState>((set, get) => ({
     set((state) => ({
       matches: state.matches.map((m) =>
         m.id === matchId ? { ...m, status } : m
+      ),
+    })),
+
+  markMatchRead: (matchId: string) =>
+    set((state) => ({
+      matches: state.matches.map((m) =>
+        m.id === matchId ? { ...m, unreadCount: 0 } : m
       ),
     })),
 
