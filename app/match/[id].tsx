@@ -159,7 +159,7 @@ export default function MatchCelebrationScreen() {
             <Text className="text-bodyMedium text-primary font-bold">Chat Now</Text>
           </Pressable>
           <Pressable
-            onPress={() => router.replace('/(tabs)/chat')}
+            onPress={() => router.replace(`/schedule/${id}` as never)}
             className="h-14 rounded-2xl bg-white/20 border border-white/30 flex-row items-center justify-center gap-2"
           >
             <Calendar size={20} color="#fff" />

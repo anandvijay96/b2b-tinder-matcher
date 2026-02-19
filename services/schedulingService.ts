@@ -1,15 +1,35 @@
-import type { MeetingSlot, MeetingStatus } from '@/models';
+import type { MeetingSlot, MeetingStatus, ProposedSlot } from '@/models';
+import mockMeetings from './mockData/meetings.json';
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
+const meetingsData = mockMeetings as Record<string, MeetingSlot[]>;
+
 export const schedulingService = {
+  getMeetings: async (matchId: string): Promise<MeetingSlot[]> => {
+    await delay(400);
+    return meetingsData[matchId] ?? [];
+  },
+
   proposeMeeting: async (
-    _matchId: string,
-    _proposedBy: string,
-    _slots: { startTimeUtc: string; endTimeUtc: string; timezone: string }[]
-  ): Promise<MeetingSlot | null> => {
-    await delay(600);
-    return null;
+    matchId: string,
+    proposedBy: string,
+    slots: { startTimeUtc: string; endTimeUtc: string; timezone: string }[]
+  ): Promise<MeetingSlot> => {
+    await delay(500);
+    const meeting: MeetingSlot = {
+      id: `meeting_${Date.now()}`,
+      matchId,
+      proposedBy,
+      slots: slots.map((s, i): ProposedSlot => ({
+        id: `slot_${Date.now()}_${i}`,
+        ...s,
+      })),
+      status: 'proposed',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    return meeting;
   },
 
   respondToMeeting: async (
@@ -17,12 +37,7 @@ export const schedulingService = {
     _status: MeetingStatus,
     _selectedSlotId?: string
   ): Promise<boolean> => {
-    await delay(400);
+    await delay(350);
     return true;
-  },
-
-  getMeetings: async (_matchId: string): Promise<MeetingSlot[]> => {
-    await delay(500);
-    return [];
   },
 };
