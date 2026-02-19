@@ -43,6 +43,16 @@ export default function DiscoverScreen() {
   const pan = useRef(new Animated.ValueXY()).current;
   const isAnimating = useRef(false);
 
+  // Refs kept current every render — avoid stale closures inside PanResponder
+  const topCandidateRef = useRef<SwipeCandidate | null>(null);
+  topCandidateRef.current = visibleCandidates[0] ?? null;
+  const visibleCountRef = useRef(0);
+  visibleCountRef.current = visibleCandidates.length;
+  const handleSwipeRef = useRef(handleSwipe);
+  handleSwipeRef.current = handleSwipe;
+  const setExpandedRef = useRef(setExpandedCandidate);
+  setExpandedRef.current = setExpandedCandidate;
+
   useEffect(() => {
     if (lastMatchId) {
       router.push(`/match/${lastMatchId}`);
@@ -67,8 +77,9 @@ export default function DiscoverScreen() {
     extrapolate: 'clamp',
   });
 
-  function swipeCard(direction: 'left' | 'right', candidate?: SwipeCandidate) {
-    if (isAnimating.current || visibleCandidates.length === 0) return;
+  // Stable swipe function — reads from refs so PanResponder always gets fresh values
+  const swipeCardRef = useRef((direction: 'left' | 'right', candidate?: SwipeCandidate) => {
+    if (isAnimating.current || visibleCountRef.current === 0) return;
     isAnimating.current = true;
     Haptics.impactAsync(
       direction === 'right'
@@ -83,30 +94,52 @@ export default function DiscoverScreen() {
       bounciness: 0,
     }).start(() => {
       pan.setValue({ x: 0, y: 0 });
-      handleSwipe(direction, candidate);
+      handleSwipeRef.current(direction, candidate);
       isAnimating.current = false;
     });
+  });
+
+  // Public swipeCard for action buttons — delegates to the stable ref
+  function swipeCard(direction: 'left' | 'right', candidate?: SwipeCandidate) {
+    swipeCardRef.current(direction, candidate);
   }
+
+  const snapBack = () => {
+    Animated.spring(pan, {
+      toValue: { x: 0, y: 0 },
+      useNativeDriver: true,
+      friction: 5,
+    }).start(() => {
+      isAnimating.current = false;
+    });
+  };
 
   const panResponder = useRef(
     PanResponder.create({
-      onStartShouldSetPanResponder: () => !isAnimating.current,
-      onMoveShouldSetPanResponder: (_, gs) => Math.abs(gs.dx) > 8,
+      // Capture ensures parent beats Pressable/ScrollView children
+      onStartShouldSetPanResponderCapture: () => !isAnimating.current,
+      onMoveShouldSetPanResponder: (_, gs) =>
+        !isAnimating.current && Math.abs(gs.dx) > 8,
       onPanResponderMove: Animated.event([null, { dx: pan.x, dy: pan.y }], {
         useNativeDriver: false,
       }),
       onPanResponderRelease: (_, gs) => {
         if (isAnimating.current) return;
+        // Minimal movement = tap → open modal
+        const isTap = Math.abs(gs.dx) < 8 && Math.abs(gs.dy) < 8;
+        if (isTap) {
+          setExpandedRef.current(topCandidateRef.current);
+          return;
+        }
         const isHardSwipe = Math.abs(gs.dx) > SWIPE_THRESHOLD || Math.abs(gs.vx) > 0.6;
         if (isHardSwipe) {
-          swipeCard(gs.dx > 0 ? 'right' : 'left');
+          swipeCardRef.current(gs.dx > 0 ? 'right' : 'left', topCandidateRef.current ?? undefined);
         } else {
-          Animated.spring(pan, {
-            toValue: { x: 0, y: 0 },
-            useNativeDriver: true,
-            friction: 5,
-          }).start();
+          snapBack();
         }
+      },
+      onPanResponderTerminate: () => {
+        snapBack();
       },
     })
   ).current;
@@ -239,9 +272,7 @@ export default function DiscoverScreen() {
                   </View>
                 </Animated.View>
 
-                <Pressable onPress={() => setExpandedCandidate(topCandidate)}>
-                  <SwipeCard candidate={topCandidate} isTopCard />
-                </Pressable>
+                <SwipeCard candidate={topCandidate} isTopCard />
               </Animated.View>
             )}
           </View>

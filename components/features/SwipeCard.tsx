@@ -1,14 +1,13 @@
 import { View, Text, ScrollView } from 'react-native';
-import Animated, { useAnimatedStyle, interpolate, Extrapolation } from 'react-native-reanimated';
-import type { SharedValue } from 'react-native-reanimated';
 import { MapPin, Users, Zap, CheckCircle } from 'lucide-react-native';
 import { Avatar, Badge, Pill } from '@/components/ui';
 import type { SwipeCandidate } from '@/models';
 
 export interface SwipeCardProps {
   candidate: SwipeCandidate;
-  panX?: SharedValue<number>;
   isTopCard?: boolean;
+  /** When true, enables vertical scrolling (e.g. inside expanded modal) */
+  scrollEnabled?: boolean;
 }
 
 function VerificationDot({ count }: { count: number }) {
@@ -21,22 +20,8 @@ function VerificationDot({ count }: { count: number }) {
   );
 }
 
-export function SwipeCard({ candidate, panX, isTopCard = false }: SwipeCardProps) {
+export function SwipeCard({ candidate, isTopCard = false, scrollEnabled = false }: SwipeCardProps) {
   const { company, matchReasons, matchScore } = candidate;
-
-  const likeOverlayStyle = useAnimatedStyle(() => {
-    if (!panX) return { opacity: 0 };
-    return {
-      opacity: interpolate(panX.value, [0, 80], [0, 1], Extrapolation.CLAMP),
-    };
-  });
-
-  const passOverlayStyle = useAnimatedStyle(() => {
-    if (!panX) return { opacity: 0 };
-    return {
-      opacity: interpolate(panX.value, [0, -80], [0, 1], Extrapolation.CLAMP),
-    };
-  });
 
   const matchColor =
     matchScore >= 85
@@ -49,35 +34,8 @@ export function SwipeCard({ candidate, panX, isTopCard = false }: SwipeCardProps
     <View className="flex-1 bg-bgSurface rounded-2xl overflow-hidden border border-borderLight"
       style={{ shadowColor: '#000', shadowOffset: { width: 0, height: 8 }, shadowOpacity: 0.12, shadowRadius: 24, elevation: 8 }}
     >
-      {/* Like / Pass Overlays — only on top card */}
-      {isTopCard && (
-        <>
-          <Animated.View
-            pointerEvents="none"
-            style={[likeOverlayStyle, { position: 'absolute', top: 24, left: 24, zIndex: 20 }]}
-          >
-            <View className="border-2 border-swipeRight rounded-lg px-4 py-2 rotate-[-12deg]">
-              <Text className="text-heading3 text-swipeRight font-bold tracking-wider">
-                INTERESTED
-              </Text>
-            </View>
-          </Animated.View>
-
-          <Animated.View
-            pointerEvents="none"
-            style={[passOverlayStyle, { position: 'absolute', top: 24, right: 24, zIndex: 20 }]}
-          >
-            <View className="border-2 border-swipeLeft rounded-lg px-4 py-2 rotate-[12deg]">
-              <Text className="text-heading3 text-swipeLeft font-bold tracking-wider">
-                PASS
-              </Text>
-            </View>
-          </Animated.View>
-        </>
-      )}
-
       <ScrollView
-        scrollEnabled={isTopCard}
+        scrollEnabled={scrollEnabled}
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ paddingBottom: 24 }}
       >

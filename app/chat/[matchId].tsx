@@ -1,8 +1,6 @@
 import {
   ActivityIndicator,
   FlatList,
-  KeyboardAvoidingView,
-  Platform,
   Pressable,
   Text,
   TextInput,
@@ -13,6 +11,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import { ArrowLeft, Send } from 'lucide-react-native';
 import { useState, useRef } from 'react';
 import { ChatBubble } from '@/components/features';
+import { KeyboardAvoidingWrapper } from '@/components/ui';
 import { useChat } from '@/hooks';
 import { useMatchStore } from '@/stores';
 import type { Message } from '@/models';
@@ -84,11 +83,7 @@ export default function ChatScreen() {
       )}
 
       {/* Messages */}
-      <KeyboardAvoidingView
-        className="flex-1"
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={0}
-      >
+      <KeyboardAvoidingWrapper>
         {isLoading ? (
           <View className="flex-1 items-center justify-center">
             <ActivityIndicator size="large" color="#1E3A5F" />
@@ -154,7 +149,7 @@ export default function ChatScreen() {
             <Send size={18} color="#fff" />
           </Pressable>
         </View>
-      </KeyboardAvoidingView>
+      </KeyboardAvoidingWrapper>
     </SafeAreaView>
   );
 }

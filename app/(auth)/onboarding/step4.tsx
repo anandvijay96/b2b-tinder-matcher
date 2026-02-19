@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import {
   ActivityIndicator,
-  KeyboardAvoidingView,
-  Platform,
   Pressable,
   ScrollView,
   Text,
@@ -12,7 +10,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { StatusBar } from 'expo-status-bar';
 
-import { Badge, Pill } from '@/components/ui';
+import { Badge, KeyboardAvoidingWrapper, Pill } from '@/components/ui';
 import { ProgressBar } from '@/components/ui/ProgressBar';
 import { useOnboarding } from '@/hooks/useOnboarding';
 
@@ -45,10 +43,7 @@ export default function OnboardingStep4() {
   return (
     <SafeAreaView className="flex-1 bg-bgBase">
       <StatusBar style="dark" />
-      <KeyboardAvoidingView
-        className="flex-1"
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      >
+      <KeyboardAvoidingWrapper>
         <View className="px-6 pt-4 pb-2">
           <ProgressBar currentStep={4} totalSteps={totalSteps} />
         </View>
@@ -239,7 +234,7 @@ export default function OnboardingStep4() {
             )}
           </Pressable>
         </View>
-      </KeyboardAvoidingView>
+      </KeyboardAvoidingWrapper>
     </SafeAreaView>
   );
 }

@@ -2,16 +2,14 @@ import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
 import {
   ActivityIndicator,
-  KeyboardAvoidingView,
-  Platform,
   Pressable,
-  ScrollView,
   Text,
   TextInput,
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
+import { KeyboardAvoidingWrapper } from '@/components/ui';
 import { useAuthStore } from '@/stores';
 
 type AuthStep = 'landing' | 'email' | 'otp';
@@ -64,14 +62,7 @@ export default function LoginScreen() {
   return (
     <SafeAreaView className="flex-1 bg-primary">
       <StatusBar style="light" />
-      <KeyboardAvoidingView
-        className="flex-1"
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      >
-        <ScrollView
-          contentContainerStyle={{ flexGrow: 1 }}
-          keyboardShouldPersistTaps="handled"
-        >
+      <KeyboardAvoidingWrapper withScroll>
           <View className="flex-1 px-8 pt-16 pb-8 justify-between">
 
             {/* Header */}
@@ -292,8 +283,7 @@ export default function LoginScreen() {
               <Text className="text-textInverse/70">Privacy Policy</Text>
             </Text>
           </View>
-        </ScrollView>
-      </KeyboardAvoidingView>
+      </KeyboardAvoidingWrapper>
     </SafeAreaView>
   );
 }
