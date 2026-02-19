@@ -79,7 +79,7 @@ A mobile-first B2B estimation and networking application for NMQ that connects v
 - [x] **1.8** Profile Builder — Step 4: Logo upload + review & submit
 - [x] **1.9** Profile completion indicator / progress bar component
 - [x] **1.10** Store completed profile in `useCompanyStore` (mock persistence via AsyncStorage)
-- [ ] **1.11** "Edit Profile" screen accessible from profile tab
+- [x] **1.11** "Edit Profile" screen accessible from profile tab
 - [x] **1.12** Form validation with Zod schemas (shared with future backend)
 - [ ] **1.13** Unit tests for auth store logic
 - [ ] **1.14** Git checkpoint: `feat: auth and onboarding complete`
@@ -87,22 +87,22 @@ A mobile-first B2B estimation and networking application for NMQ that connects v
 ### Phase 2: Swipe Deck & Discovery ✦ Sessions 6–9
 > Goal: Core Tinder-style swipe experience. AI-ordered candidate deck with rich cards. Swipe right/left with animations and haptic feedback.
 
-- [ ] **2.1** Install and configure `rn-tinder-card` (or `react-native-tinder-swipe`)
-- [ ] **2.2** `SwipeCard` component: company logo, name, industry, location, top offerings, top needs, verification badge
-- [ ] **2.3** Swipe deck screen (main tab): renders stack of `SwipeCard` components
-- [ ] **2.4** Swipe right (interested) / left (pass) gesture handling with Reanimated
+- [x] **2.1** Install and configure `rn-tinder-card` (or `react-native-tinder-swipe`) — used PanResponder + RN Animated (no extra dep needed)
+- [x] **2.2** `SwipeCard` component: company logo, name, industry, location, top offerings, top needs, verification badge
+- [x] **2.3** Swipe deck screen (main tab): renders stack of `SwipeCard` components
+- [x] **2.4** Swipe right (interested) / left (pass) gesture handling with PanResponder + Animated
 - [ ] **2.5** Haptic feedback on swipe actions via `expo-haptics`
 - [ ] **2.6** "Tap to expand" — full company profile modal on card tap
 - [ ] **2.7** AI explanation section on expanded card: "Why this match" bullet points
-- [ ] **2.8** `useSwipeDeck` hook: fetches candidates, manages deck state, records swipe actions
-- [ ] **2.9** `swipeService` with mock data: returns paginated candidate list
+- [x] **2.8** `useSwipeDeck` hook: fetches candidates, manages deck state, records swipe actions
+- [x] **2.9** `swipeService` with mock data: returns paginated candidate list (8 rich B2B candidates)
 - [ ] **2.10** Basic filters sheet: industry, company size, geography, verification level
 - [ ] **2.11** Filter state in `useSwipeStore` + filtered results
-- [ ] **2.12** Empty state when no more candidates ("You've seen everyone for now!")
-- [ ] **2.13** Daily swipe counter UI (free tier limit indicator)
+- [x] **2.12** Empty state when no more candidates ("You've seen everyone for now!")
+- [x] **2.13** Daily swipe counter UI (free tier limit indicator)
 - [ ] **2.14** Swipe undo (premium placeholder — disabled in MVP)
 - [ ] **2.15** Super-like gesture (premium placeholder — disabled in MVP)
-- [ ] **2.16** Smooth card stack animation (next card peek behind current)
+- [x] **2.16** Smooth card stack animation (next card peek behind current — scale 1.0/0.95/0.90 stack)
 - [ ] **2.17** Unit tests for swipe logic
 - [ ] **2.18** Git checkpoint: `feat: swipe deck discovery complete`
 
