@@ -10,6 +10,7 @@ import '../global.css';
 
 import { notificationService } from '@/services';
 import { useAuthStore, useCompanyStore } from '@/stores';
+import { useOTAUpdates } from '@/hooks';
 
 export {
   ErrorBoundary
@@ -27,6 +28,7 @@ export default function RootLayout() {
   });
   const { checkAuth } = useAuthStore();
   const { loadCompany } = useCompanyStore();
+  useOTAUpdates();
   useEffect(() => {
     notificationService.registerForPushNotifications();
   }, []);

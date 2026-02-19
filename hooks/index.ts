@@ -7,3 +7,5 @@ export { useMatches } from './useMatches';
 export { useOnboarding } from './useOnboarding';
 export { useScheduling } from './useScheduling';
 export { useSwipeDeck } from './useSwipeDeck';
+export { useOTAUpdates } from './useOTAUpdates';
+export type { OTAUpdateState } from './useOTAUpdates';
