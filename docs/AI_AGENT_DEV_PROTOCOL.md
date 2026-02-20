@@ -221,7 +221,46 @@ git push
 
 ---
 
-### 6.10 EAS Update: Channel ↔ Branch Mismatch
+### 6.10 EAS Build: Monorepo — Missing `appRootPath` in `eas.json`
+**Problem**: After restructuring a project into a Turborepo/npm workspaces monorepo (Expo app moved to `apps/mobile/`), EAS builds from the **git repo root**. The root `package.json` belongs to the monorepo (no `"main": "expo-router/entry"`), so Expo's default `AppEntry.js` fires and tries to resolve `../../App`, which doesn't exist:
+
+```
+Error: Unable to resolve module ../../App from node_modules/expo/AppEntry.js
+```
+
+**Root Cause**: EAS CLI reads `eas.json` from the **git repo root** only. Without `"appRootPath"` set in each build profile, EAS treats the root as the app directory — it uses the root `package.json` (monorepo config) rather than `apps/mobile/package.json` (the real Expo app).
+
+**Fix**: Add `"appRootPath": "apps/mobile"` to **every** build profile in the root `eas.json`:
+```json
+{
+  "build": {
+    "development": {
+      "appRootPath": "apps/mobile",
+      "developmentClient": true,
+      "distribution": "internal"
+    },
+    "preview": {
+      "appRootPath": "apps/mobile",
+      "distribution": "internal"
+    },
+    "production": {
+      "appRootPath": "apps/mobile",
+      "autoIncrement": true
+    }
+  }
+}
+```
+
+**Best Practices**:
+- `eas.json` MUST live at the **git repo root** — EAS CLI does not search subdirectories for it.
+- `app.json` and `package.json` for the Expo app stay in `apps/mobile/` — EAS respects `appRootPath` for resolving them.
+- The `apps/mobile/` `package.json` MUST have `"main": "expo-router/entry"` for Expo Router to work correctly.
+- Any `app.json` at the repo root (e.g. for EAS project linking) must NOT conflict with `apps/mobile/app.json`. With `appRootPath` set, EAS uses the `apps/mobile/app.json` for build config.
+- When adding a new build profile to `eas.json`, always include `"appRootPath"` or you will hit this error on that profile's first build.
+
+---
+
+### 6.11 EAS Update: Channel ↔ Branch Mismatch
 **Problem**: OTA update published to `production` branch but the installed APK was built with `preview` profile (channel: `preview`). The app never detects the update.
 
 **Explanation**: EAS builds have a **channel** (set in `eas.json` per build profile). EAS Update publishes to a **branch**. A channel maps to a branch (default: same name). An APK built with channel `preview` only checks the `preview` branch for updates.

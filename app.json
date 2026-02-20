@@ -1,65 +1,12 @@
 {
   "expo": {
-    "name": "NMQ B2B Match",
-    "slug": "nmq-b2b-match",
-    "version": "0.1.0",
-    "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
-    "scheme": "nmqb2b",
-    "userInterfaceStyle": "light",
-    "newArchEnabled": true,
-    "splash": {
-      "image": "./assets/images/splash-icon.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#1E3A5F"
-    },
-    "ios": {
-      "supportsTablet": false,
-      "bundleIdentifier": "com.nmq.b2bmatch"
-    },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#1E3A5F"
-      },
-      "package": "com.nmq.b2bmatch",
-      "edgeToEdgeEnabled": true,
-      "predictiveBackGestureEnabled": false
-    },
-    "web": {
-      "bundler": "metro",
-      "output": "static",
-      "favicon": "./assets/images/favicon.png"
-    },
-    "runtimeVersion": {
-      "policy": "appVersion"
-    },
-    "updates": {
-      "url": "https://u.expo.dev/c86b27ef-fd88-4a52-a425-3aa5fb7546b7",
-      "checkAutomatically": "ON_LOAD"
-    },
-    "plugins": [
-      "expo-router",
-      "expo-updates",
-      [
-        "expo-notifications",
-        {
-          "icon": "./assets/images/icon.png",
-          "color": "#1E3A5F",
-          "defaultChannel": "default",
-          "sounds": []
-        }
-      ]
-    ],
-    "experiments": {
-      "typedRoutes": true
-    },
     "extra": {
-      "router": {},
       "eas": {
-        "projectId": "c86b27ef-fd88-4a52-a425-3aa5fb7546b7"
+        "projectId": "5f0ecd1b-5b60-40e7-a41f-a4f23301851d"
       }
     },
-    "owner": "anandvijay96"
+    "android": {
+      "package": "com.anandvijay96.nmqb2bmatchmonorepo"
+    }
   }
 }
