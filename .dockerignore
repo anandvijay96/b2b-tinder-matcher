@@ -1,0 +1,13 @@
+apps/mobile/
+apps/mobile/node_modules/
+node_modules/
+**/node_modules/
+.git/
+docs/
+*.md
+!apps/api/README.md
+.expo/
+dist/
+web-build/
+**/.env
+**/.env.local

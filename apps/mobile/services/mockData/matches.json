@@ -1,0 +1,81 @@
+[
+  {
+    "id": "match_001",
+    "companyAId": "my_company",
+    "companyBId": "company_mock_001",
+    "matchedCompany": {
+      "id": "company_mock_001",
+      "brandName": "CloudNova Systems",
+      "logoUrl": null,
+      "industry": "Technology",
+      "hqLocation": "Austin, TX",
+      "offeringSummary": "Enterprise cloud migration and DevOps automation specialists.",
+      "needsSummary": "Looking for sales partners in North America and Europe.",
+      "verificationBadges": ["identity-verified", "documents-verified"]
+    },
+    "matchReasons": [
+      { "icon": "zap", "label": "Complementary Services", "description": "Their DevOps needs align with your automation offerings" },
+      { "icon": "globe", "label": "Geography Match", "description": "Both active in North America and Europe" },
+      { "icon": "trending-up", "label": "Growth Stage", "description": "Both scaling aggressively in enterprise" }
+    ],
+    "matchScore": 92,
+    "status": "chatting",
+    "lastMessagePreview": "Hi! Would love to explore a partnership opportunity.",
+    "lastMessageAt": "2026-02-19T10:30:00Z",
+    "unreadCount": 2,
+    "createdAt": "2026-02-18T14:00:00Z",
+    "updatedAt": "2026-02-19T10:30:00Z"
+  },
+  {
+    "id": "match_002",
+    "companyAId": "my_company",
+    "companyBId": "company_mock_002",
+    "matchedCompany": {
+      "id": "company_mock_002",
+      "brandName": "DataPulse Analytics",
+      "logoUrl": null,
+      "industry": "Technology",
+      "hqLocation": "London, UK",
+      "offeringSummary": "AI-powered analytics and BI dashboards for retail and logistics.",
+      "needsSummary": "Need cloud infra partners and compliance consultants.",
+      "verificationBadges": ["identity-verified"]
+    },
+    "matchReasons": [
+      { "icon": "bar-chart-2", "label": "Data Synergy", "description": "Your data services complement their analytics platform" },
+      { "icon": "shield", "label": "Compliance Need", "description": "They need your GDPR and security expertise" }
+    ],
+    "matchScore": 87,
+    "status": "new",
+    "lastMessagePreview": null,
+    "lastMessageAt": null,
+    "unreadCount": 0,
+    "createdAt": "2026-02-19T08:00:00Z",
+    "updatedAt": "2026-02-19T08:00:00Z"
+  },
+  {
+    "id": "match_003",
+    "companyAId": "my_company",
+    "companyBId": "company_mock_004",
+    "matchedCompany": {
+      "id": "company_mock_004",
+      "brandName": "SwiftLogix",
+      "logoUrl": null,
+      "industry": "Logistics",
+      "hqLocation": "Singapore",
+      "offeringSummary": "Real-time freight management and warehouse automation.",
+      "needsSummary": "Need tech partners for last-mile delivery optimisation.",
+      "verificationBadges": ["identity-verified", "documents-verified", "premium-verified"]
+    },
+    "matchReasons": [
+      { "icon": "truck", "label": "Supply Chain Fit", "description": "Your route optimisation tools match their logistics needs" },
+      { "icon": "map-pin", "label": "APAC Expansion", "description": "Both targeting Southeast Asian markets" }
+    ],
+    "matchScore": 79,
+    "status": "meeting_scheduled",
+    "lastMessagePreview": "Tuesday 3pm works great — looking forward to it!",
+    "lastMessageAt": "2026-02-17T15:45:00Z",
+    "unreadCount": 0,
+    "createdAt": "2026-02-15T09:00:00Z",
+    "updatedAt": "2026-02-17T15:45:00Z"
+  }
+]

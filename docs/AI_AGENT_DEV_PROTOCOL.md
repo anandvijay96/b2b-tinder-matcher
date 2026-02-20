@@ -204,7 +204,24 @@ If you see Traefik's 404 after a successful build:
 
 ---
 
-### 6.9 EAS Update: Channel ↔ Branch Mismatch
+### 6.9 EAS Build: Missing Asset Files (not committed to git)
+**Problem**: EAS cloud builds clone your repo from git. Any asset files referenced in `app.json` (icon, splash image, adaptive icon, notification icon, etc.) that are **not committed** to git will cause a prebuild failure like `ENOENT: no such file or directory, open './assets/images/adaptive-icon.png'`.
+
+**Root Cause**: Image asset files are commonly left untracked after being added locally. `git status` may show them as untracked without the developer noticing.
+
+**Fix**: Before triggering any EAS build, always verify assets are committed:
+```bash
+git status              # Check for untracked asset files
+git add assets/         # Stage all assets
+git commit -m "chore: add app icon and splash assets"
+git push
+```
+
+**Best Practice**: After adding any file referenced in `app.json`, immediately `git add` and commit it. Do not rely on local-only files for EAS builds. EAS has no access to your local filesystem — only what is in git.
+
+---
+
+### 6.10 EAS Update: Channel ↔ Branch Mismatch
 **Problem**: OTA update published to `production` branch but the installed APK was built with `preview` profile (channel: `preview`). The app never detects the update.
 
 **Explanation**: EAS builds have a **channel** (set in `eas.json` per build profile). EAS Update publishes to a **branch**. A channel maps to a branch (default: same name). An APK built with channel `preview` only checks the `preview` branch for updates.

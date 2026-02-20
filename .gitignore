@@ -38,6 +38,17 @@ yarn-error.*
 
 # Bun
 bun.lock
+apps/api/bun.lockb
+
+# Turbo
+.turbo/
+
+# API env
+apps/api/.env
+apps/api/.env.local
+
+# Package-specific builds
+apps/api/dist/
 
 # IDE
 .vscode/

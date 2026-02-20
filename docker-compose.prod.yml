@@ -1,0 +1,14 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    ports:
+      - "${PORT:-3000}:3000"
+    environment:
+      TURSO_DATABASE_URL: ${TURSO_DATABASE_URL}
+      TURSO_AUTH_TOKEN: ${TURSO_AUTH_TOKEN}
+      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET}
+      ALLOWED_ORIGINS: ${ALLOWED_ORIGINS}
+      PORT: 3000
+    restart: unless-stopped
