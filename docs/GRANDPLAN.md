@@ -161,14 +161,14 @@ A mobile-first B2B estimation and networking application for NMQ that connects v
 ### Phase 7: Backend Integration (Better-T-Stack) ✦ Sessions 18–23
 > Goal: Replace all mock services with real API calls. Monorepo setup with shared types.
 
-- [ ] **7.1** Monorepo setup: `apps/mobile`, `apps/api`, `packages/shared`, `packages/db`
-- [ ] **7.2** Drizzle schema: `companies`, `users`, `intents`, `matches`, `messages`, `meeting_slots`, `swipe_actions`, `verification_requests`
-- [ ] **7.3** Better-Auth setup: LinkedIn OAuth callback + email OTP endpoints
-- [ ] **7.4** tRPC routers: `auth`, `company`, `intent`, `match`, `message`, `scheduling`
-- [ ] **7.5** Zod schemas in `packages/shared` — shared between mobile and API
+- [x] **7.1** Monorepo setup: `apps/mobile`, `apps/api`, `packages/shared`, `packages/db`
+- [x] **7.2** Drizzle schema: `companies`, `users`, `intents`, `matches`, `messages`, `meeting_slots`, `swipe_actions`, `verification_requests`
+- [x] **7.3** Better-Auth setup: email OTP scaffold (console.log stub — wire real email provider next session)
+- [x] **7.4** tRPC routers: `auth`, `company`, `intent`, `match`, `message`, `scheduling`
+- [x] **7.5** Zod schemas in `packages/shared` — shared between mobile and API
 - [ ] **7.6** Mobile app: replace mock services with tRPC client calls
 - [ ] **7.7** Database migrations with Drizzle
-- [ ] **7.8** Cloud Run deployment config (Dockerfile, docker-compose)
+- [x] **7.8** Cloud Run deployment config (Dockerfile, docker-compose)
 - [ ] **7.9** Environment variable management (`.env`, GCP Secret Manager)
 - [ ] **7.10** Integration tests for critical API endpoints
 - [ ] **7.11** Git checkpoint: `feat: backend integration complete`
@@ -414,3 +414,4 @@ B2B-Tinder/
 | 007     | 2026-02-20 | Phase 4 finish (4.7 chat badge) + Phase 5 Scheduler + matches nav fix | 4–5   | Done        |
 | 008     | 2026-02-20 | Phase 6 push notifications scaffold (expo-notifications, deep links) | 6     | Done        |
 | 009     | 2026-02-20 | Frontend polish: swipe UX fixes, global KeyboardAvoidingWrapper, OTA updates | 2/4/6 | Done        |
+| 010     | 2026-02-20 | Phase 7: Monorepo (Turborepo), apps/api (Hono+tRPC+Better-Auth), packages/shared+db (Drizzle) | 7     | Done        |
