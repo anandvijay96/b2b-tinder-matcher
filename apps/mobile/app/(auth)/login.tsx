@@ -15,7 +15,7 @@ import { useAuthStore } from '@/stores';
 type AuthStep = 'landing' | 'email' | 'otp';
 
 export default function LoginScreen() {
-  const { login, loginWithLinkedIn, isLoading, error, clearError } = useAuthStore();
+  const { requestOtp, verifyOtp, loginWithLinkedIn, isLoading, error, clearError } = useAuthStore();
 
   const [step, setStep] = useState<AuthStep>('landing');
   const [email, setEmail] = useState('');
@@ -39,13 +39,16 @@ export default function LoginScreen() {
       setEmailError('Please enter a valid business email address.');
       return;
     }
-    setStep('otp');
+    const success = await requestOtp(email);
+    if (success) {
+      setStep('otp');
+    }
   }
 
   async function handleVerifyOtp() {
     clearError();
-    if (otp.length < 4) return;
-    await login(email, otp);
+    if (otp.length < 6) return;
+    await verifyOtp(email, otp);
   }
 
   function handleBack() {
@@ -243,10 +246,10 @@ export default function LoginScreen() {
 
                   <Pressable
                     className={`rounded-button py-4 px-6 items-center ${
-                      otp.length >= 4 ? 'bg-primary' : 'bg-primary/40'
+                      otp.length >= 6 ? 'bg-primary' : 'bg-primary/40'
                     }`}
                     onPress={handleVerifyOtp}
-                    disabled={isLoading || otp.length < 4}
+                    disabled={isLoading || otp.length < 6}
                   >
                     {isLoading ? (
                       <ActivityIndicator size="small" color="#FFFFFF" />
@@ -261,7 +264,7 @@ export default function LoginScreen() {
                     <Text className="text-caption text-textMuted">
                       Didn't receive it?
                     </Text>
-                    <Pressable onPress={() => setStep('email')}>
+                    <Pressable onPress={() => requestOtp(email)} disabled={isLoading}>
                       <Text className="text-caption text-accent font-medium">
                         Resend code
                       </Text>

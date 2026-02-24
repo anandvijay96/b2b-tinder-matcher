@@ -6,3 +6,4 @@ export { notificationService } from './notificationService';
 export type { NotificationData } from './notificationService';
 export { schedulingService } from './schedulingService';
 export { swipeService } from './swipeService';
+export { trpc, setSessionToken, clearSessionToken, getSessionToken } from './trpcClient';

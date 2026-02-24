@@ -24,7 +24,11 @@ export const authRouter = router({
       if (!result) {
         throw new TRPCError({ code: 'UNAUTHORIZED', message: 'Invalid or expired OTP' });
       }
-      return { success: true, user: result.user };
+      return {
+        success: true,
+        user: result.user,
+        token: result.token ?? null,
+      };
     }),
 
   signOut: protectedProcedure.mutation(async ({ ctx }) => {

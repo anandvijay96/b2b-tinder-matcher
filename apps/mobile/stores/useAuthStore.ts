@@ -7,7 +7,8 @@ interface AuthState {
   isAuthenticated: boolean;
   isLoading: boolean;
   error: string | null;
-  login: (email: string, password: string) => Promise<boolean>;
+  requestOtp: (email: string) => Promise<boolean>;
+  verifyOtp: (email: string, otp: string) => Promise<boolean>;
   loginWithLinkedIn: () => Promise<boolean>;
   logout: () => Promise<void>;
   checkAuth: () => Promise<void>;
@@ -20,18 +21,30 @@ export const useAuthStore = create<AuthState>((set) => ({
   isLoading: false,
   error: null,
 
-  login: async (email: string, _password: string) => {
+  requestOtp: async (email: string) => {
     set({ isLoading: true, error: null });
     try {
-      const user = await authService.loginWithEmail(email);
+      await authService.requestOtp(email);
+      set({ isLoading: false });
+      return true;
+    } catch {
+      set({ error: 'Failed to send OTP. Please try again.', isLoading: false });
+      return false;
+    }
+  },
+
+  verifyOtp: async (email: string, otp: string) => {
+    set({ isLoading: true, error: null });
+    try {
+      const user = await authService.verifyOtp(email, otp);
       if (user) {
         set({ user, isAuthenticated: true, isLoading: false });
         return true;
       }
-      set({ error: 'Invalid credentials', isLoading: false });
+      set({ error: 'Invalid or expired OTP', isLoading: false });
       return false;
     } catch {
-      set({ error: 'Login failed. Please try again.', isLoading: false });
+      set({ error: 'Verification failed. Please try again.', isLoading: false });
       return false;
     }
   },
@@ -47,15 +60,18 @@ export const useAuthStore = create<AuthState>((set) => ({
       set({ error: 'LinkedIn login failed', isLoading: false });
       return false;
     } catch {
-      set({ error: 'LinkedIn login failed. Please try again.', isLoading: false });
+      set({ error: 'LinkedIn login not yet available.', isLoading: false });
       return false;
     }
   },
 
   logout: async () => {
     set({ isLoading: true });
-    await authService.logout();
-    set({ user: null, isAuthenticated: false, isLoading: false, error: null });
+    try {
+      await authService.logout();
+    } finally {
+      set({ user: null, isAuthenticated: false, isLoading: false, error: null });
+    }
   },
 
   checkAuth: async () => {
