@@ -166,10 +166,10 @@ A mobile-first B2B estimation and networking application for NMQ that connects v
 - [x] **7.3** Better-Auth setup: email OTP scaffold (console.log stub — wire real email provider next session)
 - [x] **7.4** tRPC routers: `auth`, `company`, `intent`, `match`, `message`, `scheduling`
 - [x] **7.5** Zod schemas in `packages/shared` — shared between mobile and API
-- [ ] **7.6** Mobile app: replace mock services with tRPC client calls
-- [ ] **7.7** Database migrations with Drizzle
+- [ ] **7.6** Mobile app: replace mock services with tRPC client calls (authService done — others pending)
+- [ ] **7.7** Database migrations with Drizzle (schema ready — push pending Turso credentials)
 - [x] **7.8** Cloud Run deployment config (Dockerfile, docker-compose)
-- [ ] **7.9** Environment variable management (`.env`, GCP Secret Manager)
+- [ ] **7.9** Environment variable management (`.env` created with placeholders, GCP Secret Manager pending)
 - [ ] **7.10** Integration tests for critical API endpoints
 - [ ] **7.11** Git checkpoint: `feat: backend integration complete`
 
@@ -415,3 +415,4 @@ B2B-Tinder/
 | 008     | 2026-02-20 | Phase 6 push notifications scaffold (expo-notifications, deep links) | 6     | Done        |
 | 009     | 2026-02-20 | Frontend polish: swipe UX fixes, global KeyboardAvoidingWrapper, OTA updates | 2/4/6 | Done        |
 | 010     | 2026-02-20 | Phase 7: Monorepo (Turborepo), apps/api (Hono+tRPC+Better-Auth), packages/shared+db (Drizzle) | 7     | Done        |
+| 011     | 2026-02-24 | Phase 7 cont: tRPC auth integration, Better-Auth schema, API deps, authService→tRPC | 7     | Done        |
