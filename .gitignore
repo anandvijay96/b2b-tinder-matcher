@@ -59,3 +59,5 @@ apps/api/dist/
 
 expo-env.d.ts
 # @end expo-cli
+
+docs/apks
