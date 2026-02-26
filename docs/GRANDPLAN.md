@@ -170,8 +170,8 @@ A mobile-first B2B estimation and networking application for NMQ that connects v
 - [x] **7.3** Better-Auth setup: email OTP + nodemailer SMTP (Mailpit-ready)
 - [x] **7.4** tRPC routers: `auth`, `company`, `intent`, `match`, `message`, `scheduling`
 - [x] **7.5** Zod schemas in `packages/shared` — shared between mobile and API
-- [ ] **7.6** Mobile app: replace mock services with tRPC client calls (authService done — others pending)
-- [ ] **7.7** Database: deploy libSQL Server on Dokploy, run Drizzle push (schema ready)
+- [x] **7.6** Mobile app: replace mock services with tRPC client calls (all services wired to tRPC)
+- [x] **7.7** Database: libSQL Server running (Docker local dev), Drizzle push creates all 12 tables
 - [x] **7.8** Dokploy deployment config (Dockerfile, docker-compose, DOKPLOY_SETUP_GUIDE.md)
 - [x] **7.9** Environment variable management (`.env.example` with LIBSQL_URL, SMTP config)
 - [ ] **7.10** Integration tests for critical API endpoints
@@ -433,3 +433,4 @@ B2B-Tinder/
 | 009     | 2026-02-20 | Frontend polish: swipe UX fixes, global KeyboardAvoidingWrapper, OTA updates | 2/4/6 | Done        |
 | 010     | 2026-02-20 | Phase 7: Monorepo (Turborepo), apps/api (Hono+tRPC+Better-Auth), packages/shared+db (Drizzle) | 7     | Done        |
 | 011     | 2026-02-24 | Phase 7 cont: tRPC auth integration, Better-Auth schema, API deps, authService→tRPC | 7     | Done        |
+| 012     | 2026-02-26 | Local dev infra (libSQL+Mailpit), all mock services→tRPC, E2E OTP test passed | 7     | Done        |
