@@ -19,29 +19,33 @@ A mobile-first B2B estimation and networking application for NMQ that connects v
 - **Runtime**: Bun
 - **Framework**: Hono + tRPC (Better-T-Stack pattern)
 - **ORM**: Drizzle ORM
-- **Database**: libSQL (Turso) for structured data; pgvector or Vertex AI Vector Search for embeddings
+- **Database**: libSQL Server (self-hosted via Dokploy) for structured data; vector embeddings stored in libSQL
+- **Email**: Nodemailer + SMTP (Mailpit for dev, Postal for prod — all OSS, self-hosted)
 - **Auth**: Better-Auth (LinkedIn OAuth + Email OTP)
 - **Validation**: Zod (shared schemas via monorepo packages)
 
 ### AI / Matching
-- **Embeddings**: Google Vertex AI Text Embeddings API (`gemini-embedding-001`)
-- **Vector Store**: Vertex AI Vector Search or pgvector-enabled Cloud SQL
+- **Embeddings**: Ollama or HuggingFace text-embeddings-inference (self-hosted on Dokploy) — fallback: Google Vertex AI
+- **Vector Store**: libSQL with manual cosine similarity or self-hosted pgvector
 - **Matching**: Cosine similarity + hard filters + feedback signals
 
-### Infrastructure (GCP)
-- **Compute**: Cloud Run (containerized API)
-- **Storage**: Cloud Storage (documents, media)
-- **Messaging**: Firestore (real-time chat) or WebSocket microservice
+### Infrastructure (Self-Hosted — Dokploy)
+- **Platform**: Dokploy (OSS, self-hosted PaaS with Traefik, Docker, SSL)
+- **Database**: libSQL Server (`ghcr.io/tursodatabase/libsql-server`) — Docker on Dokploy
+- **API**: Hono+tRPC Docker container on Dokploy
+- **Email**: Mailpit (dev) / Postal (prod) — Docker on Dokploy
+- **Admin Dashboard**: Next.js 15 + shadcn/ui — Docker on Dokploy
+- **Analytics**: Plausible Community Edition (OSS) — Docker on Dokploy
 - **Push Notifications**: Expo Notifications + Firebase Cloud Messaging (FCM)
-- **Analytics**: Firebase Analytics / GA4, BigQuery
-- **Admin Web**: React (Better-T-Stack template), deployed to Cloud Run or Vercel
+- **SSL**: Let's Encrypt via Traefik (built into Dokploy)
+- **Setup Guide**: See `docs/DOKPLOY_SETUP_GUIDE.md`
 
 ### Dev Tooling
 - **Package Manager**: Bun
 - **Linting**: ESLint (flat config)
 - **Formatting**: Prettier
 - **Git**: Conventional commits (`feat:`, `fix:`, `docs:`, `refactor:`, etc.)
-- **CI/CD**: EAS Build (mobile), Docker + Cloud Run (API)
+- **CI/CD**: EAS Build (mobile), Docker + Dokploy (API, dashboard, infra)
 
 ---
 
@@ -163,22 +167,22 @@ A mobile-first B2B estimation and networking application for NMQ that connects v
 
 - [x] **7.1** Monorepo setup: `apps/mobile`, `apps/api`, `packages/shared`, `packages/db`
 - [x] **7.2** Drizzle schema: `companies`, `users`, `intents`, `matches`, `messages`, `meeting_slots`, `swipe_actions`, `verification_requests`
-- [x] **7.3** Better-Auth setup: email OTP scaffold (console.log stub — wire real email provider next session)
+- [x] **7.3** Better-Auth setup: email OTP + nodemailer SMTP (Mailpit-ready)
 - [x] **7.4** tRPC routers: `auth`, `company`, `intent`, `match`, `message`, `scheduling`
 - [x] **7.5** Zod schemas in `packages/shared` — shared between mobile and API
 - [ ] **7.6** Mobile app: replace mock services with tRPC client calls (authService done — others pending)
-- [ ] **7.7** Database migrations with Drizzle (schema ready — push pending Turso credentials)
-- [x] **7.8** Cloud Run deployment config (Dockerfile, docker-compose)
-- [ ] **7.9** Environment variable management (`.env` created with placeholders, GCP Secret Manager pending)
+- [ ] **7.7** Database: deploy libSQL Server on Dokploy, run Drizzle push (schema ready)
+- [x] **7.8** Dokploy deployment config (Dockerfile, docker-compose, DOKPLOY_SETUP_GUIDE.md)
+- [x] **7.9** Environment variable management (`.env.example` with LIBSQL_URL, SMTP config)
 - [ ] **7.10** Integration tests for critical API endpoints
 - [ ] **7.11** Git checkpoint: `feat: backend integration complete`
 
-### Phase 8: AI Matching Engine ✦ Sessions 24–26
-> Goal: Real Vertex AI embeddings for offers/needs. Semantic similarity matching. Explainability.
+### Phase 8: AI Matching Engine ♦ Sessions 24–26
+> Goal: OSS embedding model for offers/needs. Semantic similarity matching. Explainability.
 
-- [ ] **8.1** Vertex AI SDK integration in API service
+- [ ] **8.1** Self-hosted embedding model: Ollama or HuggingFace text-embeddings-inference on Dokploy
 - [ ] **8.2** Embedding generation for company offers and needs on profile save
-- [ ] **8.3** Vector storage (pgvector or Vertex AI Vector Search)
+- [ ] **8.3** Vector storage in libSQL (store as JSON/blob, compute cosine similarity in app layer)
 - [ ] **8.4** Candidate retrieval: semantic similarity search for current user's active intents
 - [ ] **8.5** Hard filter overlay: industry, geography, verification level, company size
 - [ ] **8.6** Feedback loop: negative swipes reduce similar candidates, positive matches boost
@@ -187,27 +191,36 @@ A mobile-first B2B estimation and networking application for NMQ that connects v
 - [ ] **8.9** A/B test infrastructure for ranking strategies (feature flags)
 - [ ] **8.10** Git checkpoint: `feat: AI matching engine complete`
 
-### Phase 9: Admin Dashboard ✦ Sessions 27–28
-> Goal: Web admin panel for NMQ operations team. Verification queue, moderation, analytics.
+### Phase 9: Admin Dashboard & MVP Metrics ♦ Sessions 27–30
+> Goal: Next.js admin dashboard on Dokploy for MVP data-driven decisions. See registrations, engagement, funnel, and KPIs.
 
-- [ ] **9.1** Admin web app scaffold (React + Better-T-Stack template)
-- [ ] **9.2** Business verification queue: search, filter, approve/reject
-- [ ] **9.3** User management: search, view profiles, soft-ban
-- [ ] **9.4** Content moderation: flagged profiles, spam messages
-- [ ] **9.5** KPI dashboard: active users, swipe→match conversion, match→meeting conversion
-- [ ] **9.6** Admin RBAC (admin roles via Better-Auth)
-- [ ] **9.7** Git checkpoint: `feat: admin dashboard complete`
+- [ ] **9.1** Scaffold `apps/dashboard` (Next.js 15 + TailwindCSS v4 + shadcn/ui)
+- [ ] **9.2** Direct libSQL connection for read queries (same DB as API)
+- [ ] **9.3** Admin auth: Better-Auth admin role check (reuse same auth system)
+- [ ] **9.4** **Overview page**: total users, companies, matches, messages — daily/weekly/monthly trends
+- [ ] **9.5** **Registrations page**: new users over time, email domain breakdown, onboarding completion funnel
+- [ ] **9.6** **Companies page**: profiles created, industry breakdown, verification status, avg offerings/needs
+- [ ] **9.7** **Swipe Activity page**: total swipes, right/left/super ratio, swipes per user per day, peak hours
+- [ ] **9.8** **Matches page**: match rate (swipes → matches), matches over time, avg time to first message
+- [ ] **9.9** **Messages page**: messages sent over time, avg messages per match, active conversations
+- [ ] **9.10** **Auth & OTP page**: OTP requests, verification success/fail rate, active sessions
+- [ ] **9.11** **Funnel page**: Registration → Profile → First Swipe → First Match → First Message → Meeting
+- [ ] **9.12** Business verification queue: search, filter, approve/reject
+- [ ] **9.13** User management: search, view profiles, soft-ban
+- [ ] **9.14** Deploy dashboard on Dokploy (`admin.nmqmatch.com`)
+- [ ] **9.15** Plausible Analytics integration (self-hosted on Dokploy) for usage tracking
+- [ ] **9.16** Git checkpoint: `feat: admin dashboard complete`
 
-### Phase 10: Real-Time Chat Upgrade ✦ Session 29
-> Goal: Replace polling with Firestore real-time listeners or WebSocket.
+### Phase 10: Real-Time Chat Upgrade ♦ Session 31
+> Goal: Replace polling with WebSocket for real-time messaging (self-hosted, no Firestore dependency).
 
-- [ ] **10.1** Firestore integration for real-time message syncing
+- [ ] **10.1** WebSocket server in Hono API (or separate microservice on Dokploy)
 - [ ] **10.2** Typing indicators (real-time)
 - [ ] **10.3** Online/offline presence
 - [ ] **10.4** Message read receipts (real-time)
 - [ ] **10.5** Git checkpoint: `feat: real-time chat upgrade complete`
 
-### Phase 11: Polish, Testing & Hardening ✦ Sessions 30–32
+### Phase 11: Polish, Testing & Hardening ✦ Sessions 32–34
 > Goal: Production-ready quality. Edge cases, error handling, performance.
 
 - [ ] **11.1** Comprehensive error boundaries on all screens
@@ -218,7 +231,7 @@ A mobile-first B2B estimation and networking application for NMQ that connects v
 - [ ] **11.6** Accessibility audit (screen readers, contrast, touch targets)
 - [ ] **11.7** Unit tests for all stores and services
 - [ ] **11.8** Integration tests for critical user flows (auth → swipe → match → chat → schedule)
-- [ ] **11.9** Firebase Analytics event tracking for key actions
+- [ ] **11.9** Plausible event tracking for key actions (self-hosted)
 - [ ] **11.10** App icon, splash screen, store metadata
 - [ ] **11.11** Git checkpoint: `chore: polish and hardening complete`
 
@@ -236,7 +249,7 @@ A mobile-first B2B estimation and networking application for NMQ that connects v
 - [ ] **12.9** KYB integrations for automated verification
 - [ ] **12.10** Calendar integration (Google Calendar / Microsoft 365)
 - [ ] **12.11** Chat integrations (Slack, email export)
-- [ ] **12.12** BI integration: BigQuery + Looker dashboards
+- [ ] **12.12** BI integration: export data from admin dashboard + Plausible
 - [ ] **12.13** Git checkpoint: `feat: monetization and advanced features`
 
 ---
@@ -261,7 +274,7 @@ A mobile-first B2B estimation and networking application for NMQ that connects v
 └────────────────────┼──────────────────────────────────┘
                      │ HTTPS
 ┌────────────────────┼──────────────────────────────────┐
-│              Cloud Run (GCP)                           │
+│          Dokploy Server (Self-Hosted)                  │
 │  ┌─────────────────┴────────────────────────────┐     │
 │  │           Hono + tRPC API Server              │     │
 │  │  ┌──────┐ ┌───────┐ ┌──────┐ ┌───────────┐  │     │
@@ -273,11 +286,15 @@ A mobile-first B2B estimation and networking application for NMQ that connects v
 │  └───────────────┼──────────────────────────────┘     │
 │                  │                                     │
 │  ┌───────────────┼──────────────────────────────┐     │
-│  │         Data Layer                            │     │
+│  │         Data & Services Layer                 │     │
 │  │  ┌─────────┐ ┌──────────┐ ┌───────────────┐ │     │
-│  │  │  Turso  │ │ Vertex AI│ │  Firestore    │ │     │
-│  │  │ (libSQL)│ │ Vectors  │ │  (Real-time)  │ │     │
+│  │  │ libSQL  │ │ Mailpit/ │ │  Admin Dash   │ │     │
+│  │  │ Server  │ │ Postal   │ │  (Next.js)    │ │     │
 │  │  └─────────┘ └──────────┘ └───────────────┘ │     │
+│  │  ┌─────────┐ ┌──────────┐                   │     │
+│  │  │Plausible│ │ Ollama   │                   │     │
+│  │  │Analytics│ │Embeddings│                   │     │
+│  │  └─────────┘ └──────────┘                   │     │
 │  └──────────────────────────────────────────────┘     │
 └───────────────────────────────────────────────────────┘
 ```
