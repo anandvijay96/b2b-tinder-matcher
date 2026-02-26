@@ -4,10 +4,11 @@ import { useFonts } from 'expo-font';
 import * as Notifications from 'expo-notifications';
 import { Stack, useRouter, useSegments } from 'expo-router';
 import * as ExpoSplashScreen from 'expo-splash-screen';
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import 'react-native-reanimated';
 import '../global.css';
 
+import { SplashScreen } from '@/components/SplashScreen';
 import { notificationService } from '@/services';
 import { useAuthStore, useCompanyStore } from '@/stores';
 import { useOTAUpdates } from '@/hooks';
@@ -26,6 +27,7 @@ export default function RootLayout() {
   const [loaded, error] = useFonts({
     ...FontAwesome.font,
   });
+  const [showSplash, setShowSplash] = useState(true);
   const { checkAuth } = useAuthStore();
   const { loadCompany } = useCompanyStore();
   useOTAUpdates();
@@ -48,8 +50,16 @@ export default function RootLayout() {
     loadCompany();
   }, [checkAuth, loadCompany]);
 
+  const handleSplashFinish = useCallback(() => {
+    setShowSplash(false);
+  }, []);
+
   if (!loaded) {
     return null;
+  }
+
+  if (showSplash) {
+    return <SplashScreen onFinish={handleSplashFinish} />;
   }
 
   return <RootLayoutNav />;

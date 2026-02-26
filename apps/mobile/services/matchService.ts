@@ -1,6 +1,6 @@
 import type { Match, MatchStatus } from '@/models';
 import { trpc } from './trpcClient';
-import { toIso } from './companyService';
+import { mapDbCompanyToMobile, toIso } from './companyService';
 
 function parseMatchReasons(raw: unknown): Match['matchReasons'] {
   if (!raw) return [];
@@ -15,17 +15,21 @@ function parseMatchReasons(raw: unknown): Match['matchReasons'] {
   return [];
 }
 
-function mapDbMatchToMobile(db: Record<string, unknown>): Match {
+function mapDbMatchToMobile(
+  db: Record<string, unknown>,
+  myCompanyId: string,
+): Match {
   const companyAId = db.companyAId as string;
   const companyBId = db.companyBId as string;
+  const partnerId = companyAId === myCompanyId ? companyBId : companyAId;
 
   return {
     id: db.id as string,
     companyAId,
     companyBId,
     matchedCompany: {
-      id: companyBId,
-      brandName: 'Partner Company',
+      id: partnerId,
+      brandName: 'Loading…',
       industry: '',
       hqLocation: '',
       offeringSummary: '',
@@ -43,13 +47,50 @@ function mapDbMatchToMobile(db: Record<string, unknown>): Match {
   };
 }
 
+async function hydrateMatchCompany(match: Match): Promise<Match> {
+  try {
+    const result = await trpc.company.getById.query({ id: match.matchedCompany.id });
+    const company = mapDbCompanyToMobile(result as unknown as Record<string, unknown>);
+    return {
+      ...match,
+      matchedCompany: {
+        id: company.id,
+        brandName: company.brandName,
+        industry: company.industry,
+        hqLocation: company.hqLocation,
+        logoUrl: company.logoUrl,
+        offeringSummary: company.offeringSummary,
+        needsSummary: company.needsSummary,
+        verificationBadges: company.verificationBadges,
+      },
+    };
+  } catch {
+    return match;
+  }
+}
+
+async function getMyCompanyId(): Promise<string | null> {
+  try {
+    const result = await trpc.company.getMyCompany.query();
+    return result ? (result as unknown as Record<string, unknown>).id as string : null;
+  } catch {
+    return null;
+  }
+}
+
 export const matchService = {
   getMatches: async (_companyId: string): Promise<Match[]> => {
     try {
-      const results = await trpc.match.listMatches.query();
-      return results.map((r: unknown) =>
-        mapDbMatchToMobile(r as Record<string, unknown>),
+      const [results, myCompanyId] = await Promise.all([
+        trpc.match.listMatches.query(),
+        getMyCompanyId(),
+      ]);
+      const cid = myCompanyId ?? _companyId;
+      const matchList = results.map((r: unknown) =>
+        mapDbMatchToMobile(r as Record<string, unknown>, cid),
       );
+      const hydrated = await Promise.all(matchList.map(hydrateMatchCompany));
+      return hydrated;
     } catch {
       return [];
     }
@@ -57,8 +98,15 @@ export const matchService = {
 
   getMatch: async (matchId: string): Promise<Match | null> => {
     try {
-      const result = await trpc.match.getById.query({ id: matchId });
-      return mapDbMatchToMobile(result as unknown as Record<string, unknown>);
+      const [result, myCompanyId] = await Promise.all([
+        trpc.match.getById.query({ id: matchId }),
+        getMyCompanyId(),
+      ]);
+      const match = mapDbMatchToMobile(
+        result as unknown as Record<string, unknown>,
+        myCompanyId ?? '',
+      );
+      return hydrateMatchCompany(match);
     } catch {
       return null;
     }

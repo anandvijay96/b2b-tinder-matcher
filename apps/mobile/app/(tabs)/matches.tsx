@@ -6,6 +6,10 @@ import { EmptyState } from '@/components/ui';
 import { useMatches } from '@/hooks';
 import type { Match } from '@/models';
 
+type HeaderItem = { type: 'header'; label: string; id: string };
+type MatchItem = { type: 'match'; match: Match; id: string };
+type ListItem = HeaderItem | MatchItem;
+
 export default function MatchesScreen() {
   const router = useRouter();
   const { matches, isLoading, error, refresh } = useMatches();
@@ -55,16 +59,16 @@ export default function MatchesScreen() {
           subtitle="When both businesses express interest, a match appears here."
         />
       ) : (
-        <FlatList
+        <FlatList<ListItem>
           data={[
             ...(newMatches.length > 0
-              ? [{ type: 'header', label: `New (${newMatches.length})`, id: 'header-new' }]
+              ? [{ type: 'header' as const, label: `New (${newMatches.length})`, id: 'header-new' }]
               : []),
-            ...newMatches.map((m) => ({ type: 'match', match: m, id: m.id })),
+            ...newMatches.map((m): MatchItem => ({ type: 'match', match: m, id: m.id })),
             ...(activeMatches.length > 0
-              ? [{ type: 'header', label: 'In progress', id: 'header-active' }]
+              ? [{ type: 'header' as const, label: 'In progress', id: 'header-active' }]
               : []),
-            ...activeMatches.map((m) => ({ type: 'match', match: m, id: m.id })),
+            ...activeMatches.map((m): MatchItem => ({ type: 'match', match: m, id: m.id })),
           ]}
           keyExtractor={(item) => item.id}
           showsVerticalScrollIndicator={false}
@@ -81,8 +85,8 @@ export default function MatchesScreen() {
             }
             return (
               <MatchCard
-                match={item.match as Match}
-                onPress={() => handleMatchPress(item.match as Match)}
+                match={item.match}
+                onPress={() => handleMatchPress(item.match)}
               />
             );
           }}

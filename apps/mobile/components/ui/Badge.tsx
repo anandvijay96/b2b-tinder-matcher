@@ -1,3 +1,4 @@
+import { type ReactNode } from 'react';
 import { Text, View } from 'react-native';
 
 export type BadgeVariant =
@@ -11,7 +12,8 @@ export type BadgeVariant =
   | 'neutral';
 
 export interface BadgeProps {
-  label: string;
+  label?: string;
+  children?: ReactNode;
   variant?: BadgeVariant;
   size?: 'sm' | 'md';
 }
@@ -48,14 +50,24 @@ const sizeText: Record<NonNullable<BadgeProps['size']>, string> = {
   md: 'text-caption',
 };
 
-export function Badge({ label, variant = 'neutral', size = 'md' }: BadgeProps) {
+export function Badge({ label, children, variant = 'neutral', size = 'md' }: BadgeProps) {
   return (
     <View
       className={`rounded-full items-center justify-center ${variantContainer[variant]} ${sizePadding[size]}`}
     >
-      <Text className={`font-medium ${variantText[variant]} ${sizeText[size]}`}>
-        {label}
-      </Text>
+      {children ? (
+        typeof children === 'string' ? (
+          <Text className={`font-medium ${variantText[variant]} ${sizeText[size]}`}>
+            {children}
+          </Text>
+        ) : (
+          children
+        )
+      ) : (
+        <Text className={`font-medium ${variantText[variant]} ${sizeText[size]}`}>
+          {label}
+        </Text>
+      )}
     </View>
   );
 }

@@ -2,7 +2,9 @@ import { Image, Text, View } from 'react-native';
 
 export interface AvatarProps {
   uri?: string;
+  imageUri?: string;
   name?: string;
+  initials?: string;
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
   verified?: boolean;
 }
@@ -38,12 +40,15 @@ function getInitials(name?: string): string {
   return (parts[0].charAt(0) + parts[parts.length - 1].charAt(0)).toUpperCase();
 }
 
-export function Avatar({ uri, name, size = 'md', verified = false }: AvatarProps) {
+export function Avatar({ uri, imageUri, name, initials, size = 'md', verified = false }: AvatarProps) {
+  const resolvedUri = uri || imageUri;
+  const displayInitials = initials || getInitials(name);
+
   return (
     <View className={`relative ${sizeClass[size]}`}>
-      {uri ? (
+      {resolvedUri ? (
         <Image
-          source={{ uri }}
+          source={{ uri: resolvedUri }}
           className={`${sizeClass[size]} rounded-full`}
           resizeMode="cover"
         />
@@ -52,7 +57,7 @@ export function Avatar({ uri, name, size = 'md', verified = false }: AvatarProps
           className={`${sizeClass[size]} rounded-full bg-primary-light items-center justify-center`}
         >
           <Text className={`${sizeText[size]} text-primary`}>
-            {getInitials(name)}
+            {displayInitials}
           </Text>
         </View>
       )}
