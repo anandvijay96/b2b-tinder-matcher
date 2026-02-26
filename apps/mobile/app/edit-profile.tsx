@@ -114,8 +114,7 @@ export default function EditProfileScreen() {
     if (!validate() || !company) return;
     setIsSaving(true);
     try {
-      const updated = await companyService.createCompany({
-        ...company,
+      const updated = await companyService.updateCompany(company.id, {
         legalName: form.legalName,
         brandName: form.legalName,
         website: form.website || undefined,
@@ -132,7 +131,7 @@ export default function EditProfileScreen() {
         geographies: form.geographies,
         engagementModels: form.engagementModels as EngagementModel[],
       });
-      setCompany({ ...updated, id: company.id, createdAt: company.createdAt });
+      if (updated) setCompany(updated);
       router.back();
     } catch {
       setErrors({ _form: 'Failed to save. Please try again.' });

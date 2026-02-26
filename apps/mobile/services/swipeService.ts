@@ -1,27 +1,70 @@
 import type { SwipeCandidate, SwipeDirection } from '@/models';
-import mockCandidates from './mockData/candidates.json';
+import { trpc } from './trpcClient';
+import { parseJsonArray } from './companyService';
 
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+function mapDbCompanyToCandidate(db: Record<string, unknown>): SwipeCandidate {
+  return {
+    company: {
+      id: db.id as string,
+      brandName: (db.brandName as string) ?? (db.legalName as string),
+      legalName: db.legalName as string,
+      logoUrl: db.logoUrl as string | undefined,
+      industry: db.industry as string,
+      hqLocation: db.hqLocation as string,
+      employeeRange: (db.employeeRange as string) ?? '1-10',
+      description: (db.description as string) ?? '',
+      offerings: parseJsonArray(db.offerings as string),
+      needs: parseJsonArray(db.needs as string),
+      offeringSummary: (db.offeringSummary as string) ?? '',
+      needsSummary: (db.needsSummary as string) ?? '',
+      verificationBadges: [],
+      responseSpeed: 'moderate',
+      geographies: parseJsonArray(db.geographies as string),
+    },
+    matchReasons: [
+      { icon: '🤝', label: 'Potential Synergy', description: 'Complementary offerings and needs' },
+    ],
+    matchScore: 75,
+  };
+}
+
+function directionToAction(direction: SwipeDirection): 'like' | 'pass' | 'super_like' {
+  if (direction === 'right') return 'like';
+  if (direction === 'left') return 'pass';
+  return 'super_like';
+}
 
 export const swipeService = {
   getCandidates: async (
     _companyId: string,
-    limit = 20
+    limit = 20,
   ): Promise<SwipeCandidate[]> => {
-    await delay(700);
-    return (mockCandidates as SwipeCandidate[]).slice(0, limit);
+    try {
+      const result = await trpc.company.getCandidates.query({ limit });
+      return (result.items ?? []).map((item: unknown) =>
+        mapDbCompanyToCandidate(item as Record<string, unknown>),
+      );
+    } catch {
+      return [];
+    }
   },
 
   recordSwipe: async (
     _swiperCompanyId: string,
     targetCompanyId: string,
-    direction: SwipeDirection
+    direction: SwipeDirection,
   ): Promise<{ matched: boolean; matchId?: string }> => {
-    await delay(300);
-    const matched = direction === 'right' && Math.random() > 0.6;
-    return {
-      matched,
-      matchId: matched ? `match_${targetCompanyId}_${Date.now()}` : undefined,
-    };
+    try {
+      const result = await trpc.match.recordSwipe.mutate({
+        targetCompanyId,
+        action: directionToAction(direction),
+      });
+      return {
+        matched: !!result.match,
+        matchId: result.match?.id ?? undefined,
+      };
+    } catch {
+      return { matched: false };
+    }
   },
 };
