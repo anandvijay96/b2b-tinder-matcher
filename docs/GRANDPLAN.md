@@ -85,8 +85,8 @@ A mobile-first B2B estimation and networking application for NMQ that connects v
 - [x] **1.10** Store completed profile in `useCompanyStore` (mock persistence via AsyncStorage)
 - [x] **1.11** "Edit Profile" screen accessible from profile tab
 - [x] **1.12** Form validation with Zod schemas (shared with future backend)
-- [ ] **1.13** Unit tests for auth store logic
-- [ ] **1.14** Git checkpoint: `feat: auth and onboarding complete`
+- [x] **1.13** Fix pre-existing UI component errors (Badge children, Avatar initials/imageUri, FlatList union types)
+- [x] **1.14** Lottie splash screen (Swipe card.json animation) + client-side match company enrichment
 
 ### Phase 2: Swipe Deck & Discovery ✦ Sessions 6–9
 > Goal: Core Tinder-style swipe experience. AI-ordered candidate deck with rich cards. Swipe right/left with animations and haptic feedback.
@@ -434,3 +434,4 @@ B2B-Tinder/
 | 010     | 2026-02-20 | Phase 7: Monorepo (Turborepo), apps/api (Hono+tRPC+Better-Auth), packages/shared+db (Drizzle) | 7     | Done        |
 | 011     | 2026-02-24 | Phase 7 cont: tRPC auth integration, Better-Auth schema, API deps, authService→tRPC | 7     | Done        |
 | 012     | 2026-02-26 | Local dev infra (libSQL+Mailpit), all mock services→tRPC, E2E OTP test passed | 7     | Done        |
+| 013     | 2026-02-26 | UI fixes (Badge/Avatar/FlatList), Lottie splash screen, match company enrichment, EAS build initiated | 1/7   | In Progress |
