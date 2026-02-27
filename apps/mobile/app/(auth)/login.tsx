@@ -10,12 +10,13 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { KeyboardAvoidingWrapper } from '@/components/ui';
-import { useAuthStore } from '@/stores';
+import { useAuthStore, useCompanyStore } from '@/stores';
 
 type AuthStep = 'landing' | 'email' | 'otp';
 
 export default function LoginScreen() {
-  const { requestOtp, verifyOtp, loginWithLinkedIn, isLoading, error, clearError } = useAuthStore();
+  const { requestOtp, verifyOtp, loginWithLinkedIn, devBypass, isLoading, error, clearError } = useAuthStore();
+  const { completeOnboarding } = useCompanyStore();
 
   const [step, setStep] = useState<AuthStep>('landing');
   const [email, setEmail] = useState('');
@@ -25,6 +26,36 @@ export default function LoginScreen() {
   function validateEmail(value: string): boolean {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(value);
+  }
+
+  async function handleDevBypass() {
+    const mockCompany = {
+      id: 'dev-company-001',
+      legalName: 'NMQ Demo Corp',
+      brandName: 'NMQ Demo',
+      website: 'https://nmqdemo.com',
+      logoUrl: '',
+      hqLocation: 'San Francisco, CA',
+      industry: 'Technology',
+      employeeRange: '51-200' as const,
+      description: 'Demo company for prototype walkthrough',
+      offerings: ['SaaS Platform', 'AI Consulting', 'Cloud Infrastructure'],
+      needs: ['Sales Partners', 'Marketing Agency', 'Legal Counsel'],
+      offeringSummary: 'Enterprise SaaS platform with AI-driven analytics and cloud infrastructure solutions.',
+      needsSummary: 'Looking for strategic sales partners and marketing agencies to accelerate growth.',
+      dealSizeMin: 50000,
+      dealSizeMax: 500000,
+      geographies: ['North America', 'Europe'],
+      engagementModels: ['project-based' as const, 'retainer' as const],
+      certifications: ['SOC 2', 'ISO 27001'],
+      verificationStatus: 'verified' as const,
+      verificationBadges: ['identity-verified' as const, 'documents-verified' as const],
+      responseSpeed: 'fast' as const,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    await completeOnboarding(mockCompany);
+    devBypass();
   }
 
   async function handleLinkedIn() {
@@ -132,6 +163,21 @@ export default function LoginScreen() {
                   >
                     <Text className="text-bodyMedium text-textPrimary font-medium">
                       Sign in with Email OTP
+                    </Text>
+                  </Pressable>
+
+                  {/* Dev Bypass — skip auth for demo/prototyping (remove before production) */}
+                  <View className="flex-row items-center gap-3">
+                    <View className="flex-1 h-px bg-borderLight" />
+                    <Text className="text-caption text-textMuted">demo</Text>
+                    <View className="flex-1 h-px bg-borderLight" />
+                  </View>
+                  <Pressable
+                    className="border border-dashed border-warning rounded-button py-3 px-6 items-center bg-warning/10"
+                    onPress={handleDevBypass}
+                  >
+                    <Text className="text-bodyMedium text-warning font-semibold">
+                      Skip Login (Demo)
                     </Text>
                   </Pressable>
                 </>

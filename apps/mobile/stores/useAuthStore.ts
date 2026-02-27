@@ -10,6 +10,7 @@ interface AuthState {
   requestOtp: (email: string) => Promise<boolean>;
   verifyOtp: (email: string, otp: string) => Promise<boolean>;
   loginWithLinkedIn: () => Promise<boolean>;
+  devBypass: () => void;
   logout: () => Promise<void>;
   checkAuth: () => Promise<void>;
   clearError: () => void;
@@ -63,6 +64,19 @@ export const useAuthStore = create<AuthState>((set) => ({
       set({ error: 'LinkedIn login not yet available.', isLoading: false });
       return false;
     }
+  },
+
+  devBypass: () => {
+    const mockUser: User = {
+      id: 'dev-bypass-user',
+      email: 'dev@nmqmatch.com',
+      name: 'Dev User',
+      companyId: 'dev-company-001',
+      role: 'owner',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+    set({ user: mockUser, isAuthenticated: true, isLoading: false, error: null });
   },
 
   logout: async () => {
