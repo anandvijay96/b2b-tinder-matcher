@@ -1,6 +1,7 @@
 import type { Message, MessageType } from '@/models';
 import { trpc } from './trpcClient';
 import { toIso } from './companyService';
+import { DEMO_MESSAGES } from './mockData/demoCandidates';
 
 function mapDbMessageToMobile(db: Record<string, unknown>): Message {
   const messageType = (db.messageType as string) ?? 'text';
@@ -35,7 +36,7 @@ export const chatService = {
         mapDbMessageToMobile(r as Record<string, unknown>),
       );
     } catch {
-      return [];
+      return DEMO_MESSAGES[matchId] ?? [];
     }
   },
 

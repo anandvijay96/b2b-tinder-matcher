@@ -1,6 +1,7 @@
 import type { Match, MatchStatus } from '@/models';
 import { trpc } from './trpcClient';
 import { mapDbCompanyToMobile, toIso } from './companyService';
+import { DEMO_MATCHES } from './mockData/demoCandidates';
 
 function parseMatchReasons(raw: unknown): Match['matchReasons'] {
   if (!raw) return [];
@@ -92,7 +93,7 @@ export const matchService = {
       const hydrated = await Promise.all(matchList.map(hydrateMatchCompany));
       return hydrated;
     } catch {
-      return [];
+      return DEMO_MATCHES;
     }
   },
 
@@ -108,7 +109,7 @@ export const matchService = {
       );
       return hydrateMatchCompany(match);
     } catch {
-      return null;
+      return DEMO_MATCHES.find((m) => m.id === matchId) ?? null;
     }
   },
 

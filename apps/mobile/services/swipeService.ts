@@ -1,6 +1,9 @@
 import type { SwipeCandidate, SwipeDirection } from '@/models';
 import { trpc } from './trpcClient';
 import { parseJsonArray } from './companyService';
+import { DEMO_CANDIDATES } from './mockData/demoCandidates';
+
+let demoRightSwipeCount = 0;
 
 function mapDbCompanyToCandidate(db: Record<string, unknown>): SwipeCandidate {
   return {
@@ -45,7 +48,7 @@ export const swipeService = {
         mapDbCompanyToCandidate(item as Record<string, unknown>),
       );
     } catch {
-      return [];
+      return DEMO_CANDIDATES;
     }
   },
 
@@ -64,6 +67,13 @@ export const swipeService = {
         matchId: result.match?.id ?? undefined,
       };
     } catch {
+      // Demo mode: simulate a match on every 3rd right-swipe
+      if (direction === 'right') {
+        demoRightSwipeCount++;
+        if (demoRightSwipeCount % 3 === 0) {
+          return { matched: true, matchId: `demo-match-live-${Date.now()}` };
+        }
+      }
       return { matched: false };
     }
   },

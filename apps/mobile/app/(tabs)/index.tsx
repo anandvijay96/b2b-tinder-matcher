@@ -87,15 +87,18 @@ export default function DiscoverScreen() {
         : Haptics.ImpactFeedbackStyle.Light
     );
     const toX = direction === 'right' ? SCREEN_WIDTH * 1.5 : -SCREEN_WIDTH * 1.5;
-    Animated.spring(pan, {
+    Animated.timing(pan, {
       toValue: { x: toX, y: 0 },
+      duration: 250,
       useNativeDriver: true,
-      speed: 20,
-      bounciness: 0,
     }).start(() => {
-      pan.setValue({ x: 0, y: 0 });
+      // First advance the deck (triggers re-render with new top card)
       handleSwipeRef.current(direction, candidate);
-      isAnimating.current = false;
+      // Then reset pan position on next frame so new card starts at center
+      requestAnimationFrame(() => {
+        pan.setValue({ x: 0, y: 0 });
+        isAnimating.current = false;
+      });
     });
   });
 
@@ -116,10 +119,13 @@ export default function DiscoverScreen() {
 
   const panResponder = useRef(
     PanResponder.create({
-      // Capture ensures parent beats Pressable/ScrollView children
-      onStartShouldSetPanResponderCapture: () => !isAnimating.current,
+      onStartShouldSetPanResponderCapture: () => false,
       onMoveShouldSetPanResponder: (_, gs) =>
         !isAnimating.current && Math.abs(gs.dx) > 8,
+      onPanResponderGrant: () => {
+        // Stop any running animation when user grabs the card
+        pan.stopAnimation();
+      },
       onPanResponderMove: Animated.event([null, { dx: pan.x, dy: pan.y }], {
         useNativeDriver: false,
       }),
