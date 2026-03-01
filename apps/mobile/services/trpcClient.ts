@@ -3,6 +3,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import type { AppRouter } from '@api/routers';
 
 const SESSION_TOKEN_KEY = 'nmq_session_token';
+const API_TIMEOUT_MS = 4000;
 
 function getApiUrl(): string {
   // Android emulator uses 10.0.2.2 to reach host machine's localhost
@@ -21,6 +22,14 @@ export const trpc = createTRPCClient<AppRouter>({
       async headers() {
         const token = await AsyncStorage.getItem(SESSION_TOKEN_KEY);
         return token ? { authorization: `Bearer ${token}` } : {};
+      },
+      fetch(url, options) {
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), API_TIMEOUT_MS);
+        return globalThis.fetch(url, {
+          ...options,
+          signal: controller.signal,
+        }).finally(() => clearTimeout(timeout));
       },
     }),
   ],

@@ -20,7 +20,7 @@
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
-        "backgroundColor": "#1E3A5F"
+        "backgroundColor": "#FFFFFF"
       },
       "package": "com.nmq.b2bmatch",
       "edgeToEdgeEnabled": true,
