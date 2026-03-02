@@ -1,14 +1,78 @@
+# NMQ B2B Match — Production Docker Compose (Dokploy)
+# Deploy via: Dokploy UI → Create Project → Docker Compose → paste this file
+# Then set env vars in Dokploy Environment tab (see .env.example)
+# Configure domains in Dokploy Domains tab for each service
+
 services:
+  # ---- Database ----
+  libsql:
+    image: ghcr.io/tursodatabase/libsql-server:latest
+    platform: linux/amd64
+    environment:
+      - SQLD_NODE=primary
+      - SQLD_AUTH_JWT_KEY=${LIBSQL_PUBLIC_KEY:-}
+    volumes:
+      - libsql-data:/var/lib/sqld
+    networks:
+      - dokploy-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  # ---- API Server ----
   api:
     build:
       context: .
       dockerfile: apps/api/Dockerfile
-    ports:
-      - "${PORT:-3000}:3000"
     environment:
-      TURSO_DATABASE_URL: ${TURSO_DATABASE_URL}
-      TURSO_AUTH_TOKEN: ${TURSO_AUTH_TOKEN}
-      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET}
-      ALLOWED_ORIGINS: ${ALLOWED_ORIGINS}
-      PORT: 3000
+      - LIBSQL_URL=http://libsql:8080
+      - LIBSQL_AUTH_TOKEN=${LIBSQL_AUTH_TOKEN}
+      - BETTER_AUTH_SECRET=${BETTER_AUTH_SECRET}
+      - ALLOWED_ORIGINS=${ALLOWED_ORIGINS:-http://localhost:8081}
+      - PORT=3000
+      # Email / OTP — Mailpit for dev/staging, external SMTP relay for prod
+      - SMTP_HOST=${SMTP_HOST:-mailpit}
+      - SMTP_PORT=${SMTP_PORT:-1025}
+      - SMTP_SECURE=${SMTP_SECURE:-false}
+      - SMTP_USER=${SMTP_USER:-}
+      - SMTP_PASS=${SMTP_PASS:-}
+      - FROM_EMAIL=${FROM_EMAIL:-noreply@nmqmatch.com}
+    networks:
+      - dokploy-network
+    depends_on:
+      libsql:
+        condition: service_healthy
     restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 15s
+
+  # ---- Email (Dev/Staging) ----
+  # Mailpit catches all outgoing emails — view OTP codes at mail.yourdomain.com
+  # For production: set SMTP_HOST/SMTP_USER/SMTP_PASS to a real SMTP relay
+  # (e.g. Brevo free tier = 300 emails/day) and remove this service.
+  mailpit:
+    image: axllent/mailpit:latest
+    environment:
+      - MP_SMTP_AUTH_ACCEPT_ANY=true
+      - MP_SMTP_AUTH_ALLOW_INSECURE=true
+    volumes:
+      - mailpit-data:/data
+    networks:
+      - dokploy-network
+    restart: unless-stopped
+
+volumes:
+  libsql-data:
+  mailpit-data:
+
+networks:
+  dokploy-network:
+    external: true

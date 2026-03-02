@@ -1,5 +1,5 @@
-import { View, Text, ScrollView } from 'react-native';
-import { MapPin, Users, Zap, CheckCircle } from 'lucide-react-native';
+import { View, Text, ScrollView, Pressable } from 'react-native';
+import { MapPin, Users, Zap, CheckCircle, ChevronUp } from 'lucide-react-native';
 import { Avatar, Badge, Pill } from '@/components/ui';
 import type { SwipeCandidate } from '@/models';
 
@@ -8,6 +8,8 @@ export interface SwipeCardProps {
   isTopCard?: boolean;
   /** When true, enables vertical scrolling (e.g. inside expanded modal) */
   scrollEnabled?: boolean;
+  /** Callback when the "View Details" button is tapped */
+  onViewDetails?: () => void;
 }
 
 function VerificationDot({ count }: { count: number }) {
@@ -20,7 +22,7 @@ function VerificationDot({ count }: { count: number }) {
   );
 }
 
-export function SwipeCard({ candidate, isTopCard = false, scrollEnabled = false }: SwipeCardProps) {
+export function SwipeCard({ candidate, isTopCard = false, scrollEnabled = false, onViewDetails }: SwipeCardProps) {
   const { company, matchReasons, matchScore } = candidate;
 
   const matchColor =
@@ -140,6 +142,20 @@ export function SwipeCard({ candidate, isTopCard = false, scrollEnabled = false 
                 ))}
               </View>
             </View>
+          )}
+
+          {/* View Details button — visible tap target, avoids swipe gesture conflict */}
+          {isTopCard && onViewDetails && (
+            <Pressable
+              onPress={onViewDetails}
+              className="flex-row items-center justify-center gap-1.5 bg-primary/10 rounded-xl py-2.5 mt-1"
+              hitSlop={4}
+            >
+              <ChevronUp size={16} color="#1E3A5F" />
+              <Text className="text-captionMedium text-primary font-semibold">
+                View Full Profile
+              </Text>
+            </Pressable>
           )}
         </View>
       </ScrollView>

@@ -318,19 +318,65 @@ networks:
 - **SMTP**: Your API connects to `mailpit:1025` (internal Docker network) to send emails
 - All emails are caught by Mailpit — nothing actually leaves the server
 
-### 3.4 Production Email: Postal (Optional)
+### 3.4 Production Email: How OTP Delivery Actually Works
 
-For production where emails must actually be delivered, deploy [Postal](https://docs.postalserver.io/):
+**Key question**: *Can Dokploy alone deliver real OTP emails without a domain or 3rd-party service?*
+
+**Answer: No.** Dokploy is a PaaS/deployment platform — it runs your Docker containers and provides Traefik routing + SSL. It does **not** include an SMTP relay capable of delivering emails to real inboxes. Here's why and what to do:
+
+#### Why Mailpit alone isn't enough for production
+- Mailpit **catches** all outgoing emails locally — it never delivers them to actual inboxes
+- It's perfect for dev/staging (you view OTP codes at `mail.yourdomain.com`)
+- But real users will never receive their OTP codes via Mailpit
+
+#### Option A: Free SMTP Relay (Recommended for MVP — No domain required)
+
+The simplest path. Your API already uses `nodemailer` — just change env vars to point to a real SMTP relay:
+
+| Provider | Free Tier | Domain Required? | Setup |
+|----------|-----------|-------------------|-------|
+| **Brevo** (ex-Sendinblue) | 300 emails/day | No (uses their domain) | Sign up → SMTP & API → Get SMTP credentials |
+| **SendGrid** | 100 emails/day | No (uses their domain) | Sign up → Settings → API Keys → Create SMTP key |
+| **Mailgun** | 100 emails/day (trial) | Yes (after trial) | Not recommended for free tier |
+| **AWS SES** | 200 emails/day | Yes (sandbox mode first) | More complex setup |
+
+**Brevo is the best free option** — 300 emails/day, no credit card, no domain needed, emails sent from their shared domain.
+
+To switch from Mailpit to Brevo in production, just set these env vars in Dokploy:
+
+```env
+SMTP_HOST=smtp-relay.brevo.com
+SMTP_PORT=587
+SMTP_SECURE=false
+SMTP_USER=your-brevo-login@email.com
+SMTP_PASS=your-brevo-smtp-key
+FROM_EMAIL=noreply@nmqmatch.com
+```
+
+> The API code (`apps/api/src/lib/email.ts`) already supports authenticated SMTP via `SMTP_USER`/`SMTP_PASS` env vars. **Zero code changes needed** — just update env vars.
+
+#### Option B: Self-Hosted Postal (Advanced — Requires domain + DNS)
+
+For full control over email delivery with your own domain:
 
 ```yaml
 # See https://docs.postalserver.io/install/docker for full setup
 # Postal requires:
-# - DNS: MX, SPF, DKIM, DMARC records
-# - A dedicated IP ideally
-# This is optional — you can also use any external SMTP relay
+# - A domain with DNS access (MX, SPF, DKIM, DMARC records)
+# - A dedicated IP (ideally not shared hosting)
+# - DNS propagation time (24-48h)
+# This is optional — Option A is simpler and sufficient for MVP
 ```
 
-> **MVP Recommendation**: Use Mailpit for development/testing. For production launch, either self-host Postal or use a cheap SMTP relay (Brevo free tier = 300 emails/day, no credit card needed). Both work with the same nodemailer integration in the API.
+#### Recommended Deployment Strategy
+
+| Stage | Email Solution | OTP Viewing |
+|-------|---------------|-------------|
+| **Dev (local)** | Mailpit on localhost | `http://localhost:8025` |
+| **Staging (Dokploy)** | Mailpit on Dokploy | `https://mail.nmqmatch.com` |
+| **Production (Dokploy)** | Brevo free SMTP relay | Real inbox delivery |
+
+The transition requires **only env var changes** — no code modifications.
 
 ---
 

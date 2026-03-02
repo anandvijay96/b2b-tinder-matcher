@@ -278,7 +278,11 @@ export default function DiscoverScreen() {
                   </View>
                 </Animated.View>
 
-                <SwipeCard candidate={topCandidate} isTopCard />
+                <SwipeCard
+                  candidate={topCandidate}
+                  isTopCard
+                  onViewDetails={() => setExpandedCandidate(topCandidate)}
+                />
               </Animated.View>
             )}
           </View>

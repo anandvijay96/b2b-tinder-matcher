@@ -1,11 +1,13 @@
 import { createTransport } from 'nodemailer';
 
+const smtpUser = process.env.SMTP_USER || '';
+const smtpPass = process.env.SMTP_PASS || '';
+
 const transporter = createTransport({
   host: process.env.SMTP_HOST || 'localhost',
   port: Number(process.env.SMTP_PORT || 1025),
-  secure: false,
-  // No auth needed for Mailpit; for production SMTP add:
-  // auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS },
+  secure: process.env.SMTP_SECURE === 'true',
+  ...(smtpUser && smtpPass ? { auth: { user: smtpUser, pass: smtpPass } } : {}),
 });
 
 const FROM = process.env.FROM_EMAIL || 'noreply@nmqmatch.com';

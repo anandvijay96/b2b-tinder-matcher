@@ -2,11 +2,11 @@ FROM oven/bun:1.2 AS base
 WORKDIR /app
 
 # Install dependencies (build from monorepo root context)
-COPY package.json ./
+COPY package.json bun.lock ./
 COPY packages/shared/package.json ./packages/shared/package.json
 COPY packages/db/package.json ./packages/db/package.json
 COPY apps/api/package.json ./apps/api/package.json
-RUN bun install
+RUN bun install --frozen-lockfile
 
 # Copy source
 COPY packages/shared/ ./packages/shared/

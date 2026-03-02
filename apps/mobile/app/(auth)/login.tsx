@@ -28,7 +28,11 @@ export default function LoginScreen() {
     return re.test(value);
   }
 
-  async function handleDevBypass() {
+  function handleDemoNewUser() {
+    devBypass();
+  }
+
+  async function handleDemoSkipAll() {
     const mockCompany = {
       id: 'dev-company-001',
       legalName: 'NMQ Demo Corp',
@@ -174,10 +178,21 @@ export default function LoginScreen() {
                   </View>
                   <Pressable
                     className="border border-dashed border-warning rounded-button py-3 px-6 items-center bg-warning/10"
-                    onPress={handleDevBypass}
+                    onPress={handleDemoNewUser}
                   >
                     <Text className="text-bodyMedium text-warning font-semibold">
-                      Skip Login (Demo)
+                      Demo (New User)
+                    </Text>
+                    <Text className="text-small text-warning/70 mt-0.5">
+                      Complete company setup first
+                    </Text>
+                  </Pressable>
+                  <Pressable
+                    className="border border-dashed border-textMuted rounded-button py-2.5 px-6 items-center"
+                    onPress={handleDemoSkipAll}
+                  >
+                    <Text className="text-caption text-textMuted font-medium">
+                      Skip to App (Demo)
                     </Text>
                   </Pressable>
                 </>
