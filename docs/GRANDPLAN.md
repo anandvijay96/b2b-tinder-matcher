@@ -434,4 +434,6 @@ B2B-Tinder/
 | 010     | 2026-02-20 | Phase 7: Monorepo (Turborepo), apps/api (Hono+tRPC+Better-Auth), packages/shared+db (Drizzle) | 7     | Done        |
 | 011     | 2026-02-24 | Phase 7 cont: tRPC auth integration, Better-Auth schema, API deps, authService→tRPC | 7     | Done        |
 | 012     | 2026-02-26 | Local dev infra (libSQL+Mailpit), all mock services→tRPC, E2E OTP test passed | 7     | Done        |
-| 013     | 2026-02-26 | UI fixes (Badge/Avatar/FlatList), Lottie splash screen, match company enrichment, EAS build initiated | 1/7   | In Progress |
+| 013     | 2026-02-26 | UI fixes (Badge/Avatar/FlatList), Lottie splash screen, match company enrichment, EAS build initiated | 1/7   | Done        |
+| 014     | 2026-03-01 | Fix demo data loading (tRPC timeout), new app icon, native APK build | 7     | Done        |
+| 015     | 2026-03-02 | SwipeCard View Details button, demo onboarding flow, production docker-compose + email/OTP guide | 2/7   | Done        |
