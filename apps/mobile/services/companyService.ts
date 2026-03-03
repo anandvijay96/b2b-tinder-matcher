@@ -1,4 +1,5 @@
 import type { Company, EngagementModel } from '@/models';
+import { DEMO_MODE } from '@/constants';
 import { trpc } from './trpcClient';
 
 function parseJsonArray(json: string | null | undefined): string[] {
@@ -49,6 +50,7 @@ export { mapDbCompanyToMobile, parseJsonArray, toIso };
 
 export const companyService = {
   getCompany: async (companyId: string): Promise<Company | null> => {
+    if (DEMO_MODE) return null;
     try {
       const result = await trpc.company.getById.query({ id: companyId });
       return mapDbCompanyToMobile(result as unknown as Record<string, unknown>);
@@ -58,6 +60,7 @@ export const companyService = {
   },
 
   getMyCompany: async (): Promise<Company | null> => {
+    if (DEMO_MODE) return null;
     try {
       const result = await trpc.company.getMyCompany.query();
       if (!result) return null;
@@ -68,18 +71,18 @@ export const companyService = {
   },
 
   updateCompany: async (
-    companyId: string,
+    _companyId: string,
     updates: Partial<Company>,
   ): Promise<Company | null> => {
+    if (DEMO_MODE) return updates as Company;
     try {
-      // Strip mobile-only fields not in the API schema
       const {
         id: _id, certifications: _c, verificationBadges: _vb,
         responseSpeed: _rs, createdAt: _ca, updatedAt: _ua,
         verificationStatus: _vs, ...apiFields
       } = updates;
       const result = await trpc.company.update.mutate({
-        id: companyId,
+        id: _companyId,
         ...(apiFields as unknown as Record<string, unknown>),
       } as Parameters<typeof trpc.company.update.mutate>[0]);
       return mapDbCompanyToMobile(result as unknown as Record<string, unknown>);
@@ -89,6 +92,34 @@ export const companyService = {
   },
 
   createCompany: async (data: Partial<Company>): Promise<Company> => {
+    if (DEMO_MODE) {
+      // Return a mock company object — actual persistence is via useCompanyStore/AsyncStorage
+      return {
+        id: `demo-company-${Date.now()}`,
+        legalName: data.legalName ?? '',
+        brandName: data.brandName ?? data.legalName ?? '',
+        website: data.website,
+        logoUrl: data.logoUrl,
+        hqLocation: data.hqLocation ?? '',
+        industry: data.industry ?? '',
+        employeeRange: data.employeeRange ?? '1-10',
+        description: data.description ?? '',
+        offerings: data.offerings ?? [],
+        needs: data.needs ?? [],
+        offeringSummary: data.offeringSummary ?? '',
+        needsSummary: data.needsSummary ?? '',
+        dealSizeMin: data.dealSizeMin,
+        dealSizeMax: data.dealSizeMax,
+        geographies: data.geographies ?? [],
+        engagementModels: data.engagementModels ?? [],
+        certifications: [],
+        verificationStatus: 'unverified',
+        verificationBadges: [],
+        responseSpeed: 'moderate',
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+    }
     const payload = {
       legalName: data.legalName ?? '',
       brandName: data.brandName ?? data.legalName,

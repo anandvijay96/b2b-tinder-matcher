@@ -10,6 +10,7 @@ import {
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { KeyboardAvoidingWrapper } from '@/components/ui';
+import { DEMO_MODE, DEMO_OTP_CODE } from '@/constants';
 import { useAuthStore, useCompanyStore } from '@/stores';
 
 type AuthStep = 'landing' | 'email' | 'otp';
@@ -28,11 +29,7 @@ export default function LoginScreen() {
     return re.test(value);
   }
 
-  function handleDemoNewUser() {
-    devBypass();
-  }
-
-  async function handleDemoSkipAll() {
+  async function handleSkipAll() {
     const mockCompany = {
       id: 'dev-company-001',
       legalName: 'NMQ Demo Corp',
@@ -170,29 +167,22 @@ export default function LoginScreen() {
                     </Text>
                   </Pressable>
 
-                  {/* Dev Bypass — skip auth for demo/prototyping (remove before production) */}
-                  <View className="flex-row items-center gap-3">
-                    <View className="flex-1 h-px bg-borderLight" />
-                    <Text className="text-caption text-textMuted">demo</Text>
-                    <View className="flex-1 h-px bg-borderLight" />
-                  </View>
+                  {DEMO_MODE && (
+                    <View className="bg-accent-light rounded-xl p-3 mt-1">
+                      <Text className="text-caption text-accent-dark text-center">
+                        Demo mode — LinkedIn & Email OTP work without a server.
+                        OTP code: {DEMO_OTP_CODE}
+                      </Text>
+                    </View>
+                  )}
+
+                  {/* Quick skip for demo — bypasses onboarding */}
                   <Pressable
-                    className="border border-dashed border-warning rounded-button py-3 px-6 items-center bg-warning/10"
-                    onPress={handleDemoNewUser}
+                    className="border border-dashed border-textMuted rounded-button py-2 px-6 items-center"
+                    onPress={handleSkipAll}
                   >
-                    <Text className="text-bodyMedium text-warning font-semibold">
-                      Demo (New User)
-                    </Text>
-                    <Text className="text-small text-warning/70 mt-0.5">
-                      Complete company setup first
-                    </Text>
-                  </Pressable>
-                  <Pressable
-                    className="border border-dashed border-textMuted rounded-button py-2.5 px-6 items-center"
-                    onPress={handleDemoSkipAll}
-                  >
-                    <Text className="text-caption text-textMuted font-medium">
-                      Skip to App (Demo)
+                    <Text className="text-small text-textMuted font-medium">
+                      Skip Everything (Demo)
                     </Text>
                   </Pressable>
                 </>
@@ -279,6 +269,11 @@ export default function LoginScreen() {
                       We sent a 6-digit code to{' '}
                       <Text className="font-medium text-textSecondary">{email}</Text>
                     </Text>
+                    {DEMO_MODE && (
+                      <Text className="text-caption text-accent font-medium">
+                        Demo code: {DEMO_OTP_CODE}
+                      </Text>
+                    )}
                   </View>
 
                   {error && (

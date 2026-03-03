@@ -1,4 +1,5 @@
 import type { SwipeCandidate, SwipeDirection } from '@/models';
+import { DEMO_MODE } from '@/constants';
 import { trpc } from './trpcClient';
 import { parseJsonArray } from './companyService';
 import { DEMO_CANDIDATES } from './mockData/demoCandidates';
@@ -42,6 +43,10 @@ export const swipeService = {
     _companyId: string,
     limit = 20,
   ): Promise<SwipeCandidate[]> => {
+    if (DEMO_MODE) {
+      await new Promise((r) => setTimeout(r, 300));
+      return DEMO_CANDIDATES.slice(0, limit);
+    }
     try {
       const result = await trpc.company.getCandidates.query({ limit });
       return (result.items ?? []).map((item: unknown) =>
@@ -57,6 +62,16 @@ export const swipeService = {
     targetCompanyId: string,
     direction: SwipeDirection,
   ): Promise<{ matched: boolean; matchId?: string }> => {
+    if (DEMO_MODE) {
+      await new Promise((r) => setTimeout(r, 150));
+      if (direction === 'right') {
+        demoRightSwipeCount++;
+        if (demoRightSwipeCount % 3 === 0) {
+          return { matched: true, matchId: `demo-match-live-${Date.now()}` };
+        }
+      }
+      return { matched: false };
+    }
     try {
       const result = await trpc.match.recordSwipe.mutate({
         targetCompanyId,
@@ -67,7 +82,6 @@ export const swipeService = {
         matchId: result.match?.id ?? undefined,
       };
     } catch {
-      // Demo mode: simulate a match on every 3rd right-swipe
       if (direction === 'right') {
         demoRightSwipeCount++;
         if (demoRightSwipeCount % 3 === 0) {

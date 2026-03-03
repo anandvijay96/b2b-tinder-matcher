@@ -1,11 +1,14 @@
 import type { Message, MessageType } from '@/models';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { DEMO_MODE } from '@/constants';
 import { trpc } from './trpcClient';
 import { toIso } from './companyService';
 import { DEMO_MESSAGES } from './mockData/demoCandidates';
 
+const DEMO_CHAT_PREFIX = '@nmq_demo_chat_';
+
 function mapDbMessageToMobile(db: Record<string, unknown>): Message {
   const messageType = (db.messageType as string) ?? 'text';
-  // Map API message types to mobile types
   const typeMap: Record<string, MessageType> = {
     text: 'text',
     rfq_template: 'rfq_template',
@@ -20,7 +23,7 @@ function mapDbMessageToMobile(db: Record<string, unknown>): Message {
     id: db.id as string,
     matchId: db.matchId as string,
     senderId: db.senderId as string,
-    senderCompanyId: '', // API doesn't track this separately; resolved client-side
+    senderCompanyId: '',
     content: db.content as string,
     type: typeMap[messageType] ?? 'text',
     isRead: !!db.readAt,
@@ -28,8 +31,31 @@ function mapDbMessageToMobile(db: Record<string, unknown>): Message {
   };
 }
 
+async function loadDemoMessages(matchId: string): Promise<Message[]> {
+  try {
+    const raw = await AsyncStorage.getItem(`${DEMO_CHAT_PREFIX}${matchId}`);
+    if (raw) return JSON.parse(raw);
+  } catch { /* ignore */ }
+  return [];
+}
+
+async function saveDemoMessages(matchId: string, messages: Message[]): Promise<void> {
+  try {
+    await AsyncStorage.setItem(`${DEMO_CHAT_PREFIX}${matchId}`, JSON.stringify(messages));
+  } catch { /* ignore */ }
+}
+
 export const chatService = {
   getMessages: async (matchId: string): Promise<Message[]> => {
+    if (DEMO_MODE) {
+      // Merge static demo messages with any user-sent messages from AsyncStorage
+      const staticMsgs = DEMO_MESSAGES[matchId] ?? [];
+      const savedMsgs = await loadDemoMessages(matchId);
+      // Dedupe by id
+      const ids = new Set(savedMsgs.map((m) => m.id));
+      return [...staticMsgs.filter((m) => !ids.has(m.id)), ...savedMsgs]
+        .sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+    }
     try {
       const results = await trpc.message.listByMatch.query({ matchId });
       return results.map((r: unknown) =>
@@ -42,12 +68,29 @@ export const chatService = {
 
   sendMessage: async (
     matchId: string,
-    _senderId: string,
-    _senderCompanyId: string,
+    senderId: string,
+    senderCompanyId: string,
     content: string,
     type: MessageType = 'text',
   ): Promise<Message> => {
-    // Map mobile MessageType to API messageType
+    if (DEMO_MODE) {
+      await new Promise((r) => setTimeout(r, 200));
+      const newMsg: Message = {
+        id: `demo-msg-${Date.now()}`,
+        matchId,
+        senderId,
+        senderCompanyId,
+        content,
+        type,
+        isRead: true,
+        createdAt: new Date().toISOString(),
+      };
+      // Persist to AsyncStorage
+      const existing = await loadDemoMessages(matchId);
+      existing.push(newMsg);
+      await saveDemoMessages(matchId, existing);
+      return newMsg;
+    }
     const apiTypeMap: Record<string, string> = {
       text: 'text',
       rfq_template: 'rfq_template',
@@ -65,8 +108,8 @@ export const chatService = {
   },
 
   markAsRead: async (matchId: string, _userId: string): Promise<boolean> => {
+    if (DEMO_MODE) return true;
     try {
-      // Fetch unread messages for the match and mark them all as read
       const messages = await trpc.message.listByMatch.query({ matchId });
       const unreadIds = messages
         .filter((m: unknown) => !(m as Record<string, unknown>).readAt)
