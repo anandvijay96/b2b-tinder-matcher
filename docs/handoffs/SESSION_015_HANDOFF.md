@@ -121,6 +121,8 @@ The `Badge.tsx` component already has `neutral` in its `BadgeVariant` type and b
 
 ```
 5f64a34 feat: swipe card View Details button, demo onboarding flow, production docker-compose + email OTP
+055e350 docs: session 015 handoff + GRANDPLAN session log update
+b8582dc feat: full demo mode — all services work offline with mock data, no server needed
 ```
 
 ---
@@ -129,39 +131,92 @@ The `Badge.tsx` component already has `neutral` in its `BadgeVariant` type and b
 
 | File | Change |
 |------|--------|
+| `apps/mobile/constants/demoMode.ts` | **NEW** — `DEMO_MODE` flag + `DEMO_OTP_CODE` ('123456') |
+| `apps/mobile/constants/index.ts` | Export `DEMO_MODE`, `DEMO_OTP_CODE` |
+| `apps/mobile/services/authService.ts` | Demo LinkedIn login emulates success, OTP accepts '123456' |
+| `apps/mobile/services/swipeService.ts` | Demo mode skips tRPC, returns candidates instantly |
+| `apps/mobile/services/matchService.ts` | Demo mode uses AsyncStorage for match persistence |
+| `apps/mobile/services/chatService.ts` | Demo mode stores messages in AsyncStorage |
+| `apps/mobile/services/companyService.ts` | Demo mode returns mock data, skips tRPC |
+| `apps/mobile/services/schedulingService.ts` | Demo mode stores meetings in AsyncStorage |
+| `apps/mobile/app/(auth)/login.tsx` | LinkedIn + OTP work in demo, OTP hint shows '123456', single 'Skip Everything' button |
 | `apps/mobile/components/features/SwipeCard.tsx` | Added `onViewDetails` prop + "View Full Profile" button |
 | `apps/mobile/app/(tabs)/index.tsx` | Wired `onViewDetails` to open CompanyExpandModal |
-| `apps/mobile/app/(auth)/login.tsx` | Split demo into "Demo (New User)" + "Skip to App (Demo)" |
 | `apps/api/Dockerfile` | Added `bun.lock` copy + `--frozen-lockfile` |
 | `docker-compose.prod.yml` | Complete rewrite with all services + health checks |
-| `.env.example` | New file with all env vars documented |
+| `.env.example` | **NEW** — All env vars documented (Brevo/SendGrid examples) |
 | `docs/DOKPLOY_SETUP_GUIDE.md` | Production email/OTP section (3.4) |
 | `docs/GRANDPLAN.md` | Updated session log (013→Done, added 014, 015) |
 
 ---
 
+## Demo Mode Architecture
+
+All services check `DEMO_MODE` (from `constants/demoMode.ts`) and skip tRPC calls entirely when `true`.
+
+| Service | Demo Behavior |
+|---------|--------------|
+| **authService** | LinkedIn emulates success (800ms delay), Email OTP accepts '123456' |
+| **swipeService** | Returns `DEMO_CANDIDATES` instantly, match on every 3rd right-swipe |
+| **matchService** | Merges static `DEMO_MATCHES` + AsyncStorage-persisted live matches |
+| **chatService** | Merges static `DEMO_MESSAGES` + AsyncStorage-persisted user messages |
+| **companyService** | Returns mock data, skips tRPC. Profile managed by `useCompanyStore`/AsyncStorage |
+| **schedulingService** | Meetings stored in AsyncStorage. Propose/respond work locally |
+
+**To switch to production**: Set `DEMO_MODE = false` in `constants/demoMode.ts`. All services will use tRPC calls to the real API.
+
+---
+
+## Demo Flows Available
+
+| Flow | How to Test |
+|------|------------|
+| **LinkedIn Login** | Tap "Continue with LinkedIn" → emulates OAuth → redirects to onboarding |
+| **Email OTP Login** | Tap "Sign in with Email OTP" → enter any email → use code `123456` → redirects to onboarding |
+| **Skip Everything** | Tap "Skip Everything (Demo)" → straight to swipe deck with pre-filled company |
+| **Onboarding** | 4-step flow: Company basics → Offerings & Needs → Deal preferences → Review & Submit |
+| **Discover/Swipe** | Swipe cards with company info, "View Full Profile" button opens detailed modal |
+| **Matches** | Static demo matches + live matches from right-swipes (every 3rd swipe) |
+| **Chat** | Send messages, they persist in AsyncStorage across app restarts |
+| **Schedule Meeting** | Propose time slots, they persist locally |
+| **Profile** | Edit company info, persisted in AsyncStorage |
+
+---
+
 ## Known Issues
 
-- **IDE lint noise**: The `index.tsx` shows ~500+ TSX parsing errors in the IDE. These are pre-existing monorepo tsconfig resolution issues — the app compiles and runs fine via `npx expo start`. Not caused by session 015 changes.
-- **Build quota**: 12 remaining. These changes are JS-only → can be pushed via OTA update.
+- **IDE lint noise**: `index.tsx` shows ~500+ TSX parsing errors in the IDE — pre-existing monorepo tsconfig resolution. App compiles and runs fine.
+- **Pre-existing TS errors**: `Pill` component doesn't have `neutral` variant, `Badge` doesn't accept `style` prop, tRPC fetch type mismatch. None block runtime.
+- **Build quota**: 12 remaining. Demo mode changes are JS-only → push via OTA update.
 
 ---
 
 ## Next Session Prompt
 
-> **Objective**: Dokploy server setup, test demo flows on device, push OTA update
+> Read `docs/handoffs/SESSION_015_HANDOFF.md` + `docs/GRANDPLAN.md`
 >
-> **Priority Tasks**:
-> 1. User does Dokploy server setup using `docker-compose.prod.yml` + `DOKPLOY_SETUP_GUIDE.md`
-> 2. Push OTA update with session 015 changes (JS-only, no native build needed)
-> 3. Test demo flows on APK: "Demo (New User)" → onboarding → swipe → "View Full Profile" button → matches → chat
-> 4. Test "Skip to App (Demo)" still works for quick access
-> 5. Consider: match detail screen (3.5), typing indicator (4.6), meeting confirmation (5.4)
-> 6. Plan Brevo SMTP setup for production OTP delivery
+> **Objective**: Complete the UI prototype — every screen should be polished, interactive, and demo-ready. Think of this as a native Figma prototype.
+>
+> **Context**: Full demo mode is now implemented. All services work offline with `DEMO_MODE = true`. LinkedIn login, Email OTP (code: 123456), swipe, match, chat, scheduling, and profile all work without any server. Data persists in AsyncStorage.
+>
+> **Priority Tasks (UI Completeness)**:
+> 1. Push OTA update with demo mode changes to test on APK
+> 2. Test all demo flows on device: LinkedIn → onboarding → swipe → matches → chat → schedule → profile
+> 3. Fix any remaining UI issues discovered during testing
+> 4. Match detail screen (GRANDPLAN 3.5) — tap a match card to see full company profile + chat/schedule actions
+> 5. Polish: empty states, loading skeletons, transitions between screens
+> 6. Review all screens for B2B professional look and feel
+>
+> **Deferred (for later sessions)**:
+> - Dokploy server setup + real API integration
+> - Brevo SMTP for production OTP delivery
+> - AI matching engine (Phase 8)
+> - Admin dashboard (Phase 9)
 >
 > **Build Quota**: 12 remaining. Use OTA for JS-only changes.
 
 ---
 
-**Handoff Created**: Mar 2, 2026 @ 23:44 UTC+05:30  
+**Handoff Created**: Mar 2, 2026  
+**Updated**: Mar 3, 2026 — Added full demo mode implementation  
 **Next Session**: TBD
