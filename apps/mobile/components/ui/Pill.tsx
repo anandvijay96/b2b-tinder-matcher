@@ -2,7 +2,7 @@ import { Pressable, Text, View } from 'react-native';
 
 export interface PillProps {
   label: string;
-  variant?: 'default' | 'primary' | 'accent' | 'muted';
+  variant?: 'default' | 'primary' | 'accent' | 'muted' | 'neutral';
   onRemove?: () => void;
   onPress?: () => void;
   selected?: boolean;
@@ -13,6 +13,7 @@ const variantContainer: Record<NonNullable<PillProps['variant']>, string> = {
   primary: 'bg-primary-light border border-primary/20',
   accent: 'bg-accent-light border border-accent/20',
   muted: 'bg-bgSurfaceSecondary border border-borderLight',
+  neutral: 'bg-bgSurfaceSecondary border border-borderMedium',
 };
 
 const variantContainerSelected: Record<NonNullable<PillProps['variant']>, string> = {
@@ -20,6 +21,7 @@ const variantContainerSelected: Record<NonNullable<PillProps['variant']>, string
   primary: 'bg-primary border border-primary',
   accent: 'bg-accent border border-accent',
   muted: 'bg-textMuted border border-textMuted',
+  neutral: 'bg-textSecondary border border-textSecondary',
 };
 
 const variantText: Record<NonNullable<PillProps['variant']>, string> = {
@@ -27,6 +29,7 @@ const variantText: Record<NonNullable<PillProps['variant']>, string> = {
   primary: 'text-primary',
   accent: 'text-accent-dark',
   muted: 'text-textMuted',
+  neutral: 'text-textSecondary',
 };
 
 const variantTextSelected: Record<NonNullable<PillProps['variant']>, string> = {
@@ -34,6 +37,7 @@ const variantTextSelected: Record<NonNullable<PillProps['variant']>, string> = {
   primary: 'text-textInverse',
   accent: 'text-textInverse',
   muted: 'text-textInverse',
+  neutral: 'text-textInverse',
 };
 
 export function Pill({

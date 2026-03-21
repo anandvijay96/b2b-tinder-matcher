@@ -75,9 +75,9 @@ export function MatchCard({ match, onPress }: MatchCardProps) {
         </View>
 
         <View className="flex-row items-center gap-1.5">
-          <Badge variant="neutral" style={{ paddingHorizontal: 6, paddingVertical: 1 }}>
-            {matchedCompany.industry}
-          </Badge>
+          <View className="bg-bgSurfaceSecondary border border-borderMedium rounded-pill px-1.5 py-0.5">
+            <Text className="text-small text-textSecondary">{matchedCompany.industry}</Text>
+          </View>
           {matchedCompany.verificationBadges.length > 0 && (
             <CheckCircle size={11} color="#0D9488" />
           )}

@@ -169,20 +169,22 @@ export default function LoginScreen() {
 
                   {DEMO_MODE && (
                     <View className="bg-accent-light rounded-xl p-3 mt-1">
-                      <Text className="text-caption text-accent-dark text-center">
-                        Demo mode — LinkedIn & Email OTP work without a server.
-                        OTP code: {DEMO_OTP_CODE}
+                      <Text className="text-caption text-accent-dark text-center font-medium">
+                        Demo Mode Active
+                      </Text>
+                      <Text className="text-small text-accent-dark/70 text-center mt-0.5">
+                        Use LinkedIn or Email OTP (code: {DEMO_OTP_CODE}) to experience the full onboarding flow.
                       </Text>
                     </View>
                   )}
 
-                  {/* Quick skip for demo — bypasses onboarding */}
+                  {/* Dev-only skip — tiny and unobtrusive */}
                   <Pressable
-                    className="border border-dashed border-textMuted rounded-button py-2 px-6 items-center"
+                    className="py-1.5 items-center opacity-40"
                     onPress={handleSkipAll}
                   >
-                    <Text className="text-small text-textMuted font-medium">
-                      Skip Everything (Demo)
+                    <Text className="text-small text-textMuted">
+                      Skip to app →
                     </Text>
                   </Pressable>
                 </>

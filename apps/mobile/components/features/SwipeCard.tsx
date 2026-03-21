@@ -39,7 +39,7 @@ export function SwipeCard({ candidate, isTopCard = false, scrollEnabled = false,
       <ScrollView
         scrollEnabled={scrollEnabled}
         showsVerticalScrollIndicator={false}
-        contentContainerStyle={{ paddingBottom: 24 }}
+        contentContainerStyle={{ paddingBottom: isTopCard && onViewDetails ? 56 : 24 }}
       >
         {/* Header Band */}
         <View className="bg-primary px-5 pt-6 pb-5">
@@ -72,7 +72,9 @@ export function SwipeCard({ candidate, isTopCard = false, scrollEnabled = false,
 
           {/* Match Score */}
           <View className="mt-4 flex-row items-center justify-between">
-            <Badge variant="neutral">{company.industry}</Badge>
+            <View className="bg-white/20 rounded-pill px-2.5 py-1">
+              <Text className="text-small text-textInverse font-medium">{company.industry}</Text>
+            </View>
             <View className="flex-row items-center gap-2">
               <View className="h-2 w-24 bg-white/20 rounded-pill overflow-hidden">
                 <View
@@ -144,21 +146,23 @@ export function SwipeCard({ candidate, isTopCard = false, scrollEnabled = false,
             </View>
           )}
 
-          {/* View Details button — visible tap target, avoids swipe gesture conflict */}
-          {isTopCard && onViewDetails && (
-            <Pressable
-              onPress={onViewDetails}
-              className="flex-row items-center justify-center gap-1.5 bg-primary/10 rounded-xl py-2.5 mt-1"
-              hitSlop={4}
-            >
-              <ChevronUp size={16} color="#1E3A5F" />
-              <Text className="text-captionMedium text-primary font-semibold">
-                View Full Profile
-              </Text>
-            </Pressable>
-          )}
         </View>
       </ScrollView>
+
+      {/* Persistent bottom button — always visible regardless of content height */}
+      {isTopCard && onViewDetails && (
+        <Pressable
+          onPress={onViewDetails}
+          className="absolute bottom-0 left-0 right-0 flex-row items-center justify-center gap-1.5 bg-primary rounded-b-2xl py-3.5"
+          hitSlop={4}
+          style={{ elevation: 10 }}
+        >
+          <ChevronUp size={16} color="#FFFFFF" />
+          <Text className="text-captionMedium text-textInverse font-semibold">
+            View Full Profile
+          </Text>
+        </Pressable>
+      )}
     </View>
   );
 }
