@@ -74,7 +74,20 @@ export const companyService = {
     _companyId: string,
     updates: Partial<Company>,
   ): Promise<Company | null> => {
-    if (DEMO_MODE) return updates as Company;
+    if (DEMO_MODE) {
+      // Merge with stored company so we return a full Company object
+      const AsyncStorage = (await import('@react-native-async-storage/async-storage')).default;
+      try {
+        const raw = await AsyncStorage.getItem('@nmq_company_profile');
+        if (raw) {
+          const existing = JSON.parse(raw) as Company;
+          const merged = { ...existing, ...updates, updatedAt: new Date().toISOString() };
+          await AsyncStorage.setItem('@nmq_company_profile', JSON.stringify(merged));
+          return merged;
+        }
+      } catch { /* fallthrough */ }
+      return updates as Company;
+    }
     try {
       const {
         id: _id, certifications: _c, verificationBadges: _vb,
