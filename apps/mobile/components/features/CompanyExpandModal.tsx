@@ -106,7 +106,9 @@ export function CompanyExpandModal({
             </View>
 
             <View className="mt-4 flex-row items-center justify-between">
-              <Badge variant="neutral">{company.industry}</Badge>
+              <View className="bg-white/20 rounded-pill px-2.5 py-1">
+                <Text className="text-small text-textInverse font-medium">{company.industry}</Text>
+              </View>
               <View className="flex-row items-center gap-2">
                 <View className="h-2 w-24 bg-white/20 rounded-pill overflow-hidden">
                   <View
