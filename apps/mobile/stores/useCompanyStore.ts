@@ -20,7 +20,7 @@ export interface OnboardingDraft {
   dealSizeMax?: number;
   geographies: string[];
   engagementModels: string[];
-  logoUrl: string;
+  logoUrl?: string;
   description: string;
 }
 
@@ -51,7 +51,7 @@ interface CompanyState {
   onboardingDraft: OnboardingDraft;
   setCompany: (company: Company) => void;
   updateCompany: (updates: Partial<Company>) => void;
-  clearCompany: () => void;
+  clearCompany: () => Promise<void>;
   setOnboardingDraft: (updates: Partial<OnboardingDraft>) => void;
   resetOnboardingDraft: () => void;
   persistDraft: () => Promise<void>;
@@ -75,8 +75,13 @@ export const useCompanyStore = create<CompanyState>((set, get) => ({
       company: state.company ? { ...state.company, ...updates } : null,
     })),
 
-  clearCompany: () =>
-    set({ company: null, hasCompletedOnboarding: false }),
+  clearCompany: async () => {
+    set({ company: null, hasCompletedOnboarding: false });
+    try {
+      await AsyncStorage.removeItem(COMPANY_STORAGE_KEY);
+      await AsyncStorage.removeItem(ONBOARDING_DRAFT_KEY);
+    } catch { /* ignore */ }
+  },
 
   setOnboardingDraft: (updates: Partial<OnboardingDraft>) =>
     set((state) => ({

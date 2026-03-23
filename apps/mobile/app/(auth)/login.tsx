@@ -14,15 +14,26 @@ import { DEMO_MODE, DEMO_OTP_CODE } from '@/constants';
 import { useAuthStore, useCompanyStore } from '@/stores';
 
 type AuthStep = 'landing' | 'email' | 'otp';
+type AuthMode = 'signup' | 'signin';
 
 export default function LoginScreen() {
   const { requestOtp, verifyOtp, loginWithLinkedIn, devBypass, isLoading, error, clearError } = useAuthStore();
   const { completeOnboarding } = useCompanyStore();
 
   const [step, setStep] = useState<AuthStep>('landing');
+  const [mode, setMode] = useState<AuthMode>('signup');
   const [email, setEmail] = useState('');
   const [otp, setOtp] = useState('');
   const [emailError, setEmailError] = useState('');
+
+  function switchMode(newMode: AuthMode) {
+    clearError();
+    setEmailError('');
+    setEmail('');
+    setOtp('');
+    setStep('landing');
+    setMode(newMode);
+  }
 
   function validateEmail(value: string): boolean {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -119,13 +130,46 @@ export default function LoginScreen() {
               {/* Step: Landing — choose auth method */}
               {step === 'landing' && (
                 <>
+                  {/* Sign Up / Sign In toggle */}
+                  <View className="flex-row bg-bgBase rounded-xl p-1">
+                    <Pressable
+                      className={`flex-1 py-2.5 rounded-lg items-center ${mode === 'signup' ? 'bg-primary' : ''}`}
+                      onPress={() => switchMode('signup')}
+                    >
+                      <Text className={`text-captionMedium font-semibold ${mode === 'signup' ? 'text-textInverse' : 'text-textMuted'}`}>
+                        Sign Up
+                      </Text>
+                    </Pressable>
+                    <Pressable
+                      className={`flex-1 py-2.5 rounded-lg items-center ${mode === 'signin' ? 'bg-primary' : ''}`}
+                      onPress={() => switchMode('signin')}
+                    >
+                      <Text className={`text-captionMedium font-semibold ${mode === 'signin' ? 'text-textInverse' : 'text-textMuted'}`}>
+                        Sign In
+                      </Text>
+                    </Pressable>
+                  </View>
+
                   <View className="gap-1">
-                    <Text className="text-heading3 text-textPrimary font-semibold">
-                      Welcome back
-                    </Text>
-                    <Text className="text-caption text-textMuted">
-                      Sign in to discover your next business partner.
-                    </Text>
+                    {mode === 'signup' ? (
+                      <>
+                        <Text className="text-heading3 text-textPrimary font-semibold">
+                          Create your account
+                        </Text>
+                        <Text className="text-caption text-textMuted">
+                          Set up your company profile and start discovering B2B partners.
+                        </Text>
+                      </>
+                    ) : (
+                      <>
+                        <Text className="text-heading3 text-textPrimary font-semibold">
+                          Welcome back
+                        </Text>
+                        <Text className="text-caption text-textMuted">
+                          Sign in to continue discovering business partners.
+                        </Text>
+                      </>
+                    )}
                   </View>
 
                   {error && (
@@ -144,7 +188,7 @@ export default function LoginScreen() {
                       <ActivityIndicator size="small" color="#FFFFFF" />
                     ) : (
                       <Text className="text-bodyMedium text-textInverse font-semibold">
-                        Continue with LinkedIn
+                        {mode === 'signup' ? 'Sign up with LinkedIn' : 'Continue with LinkedIn'}
                       </Text>
                     )}
                   </Pressable>
@@ -163,17 +207,19 @@ export default function LoginScreen() {
                     disabled={isLoading}
                   >
                     <Text className="text-bodyMedium text-textPrimary font-medium">
-                      Sign in with Email OTP
+                      {mode === 'signup' ? 'Sign up with Email' : 'Sign in with Email OTP'}
                     </Text>
                   </Pressable>
 
                   {DEMO_MODE && (
                     <View className="bg-accent-light rounded-xl p-3 mt-1">
                       <Text className="text-caption text-accent-dark text-center font-medium">
-                        Demo Mode Active
+                        Demo Mode
                       </Text>
                       <Text className="text-small text-accent-dark/70 text-center mt-0.5">
-                        Use LinkedIn or Email OTP (code: {DEMO_OTP_CODE}) to experience the full onboarding flow.
+                        {mode === 'signup'
+                          ? `Use LinkedIn or Email (code: ${DEMO_OTP_CODE}) — onboarding follows.`
+                          : `OTP code: ${DEMO_OTP_CODE}`}
                       </Text>
                     </View>
                   )}
@@ -195,10 +241,12 @@ export default function LoginScreen() {
                 <>
                   <View className="gap-1">
                     <Text className="text-heading3 text-textPrimary font-semibold">
-                      Enter your email
+                      {mode === 'signup' ? 'Your business email' : 'Enter your email'}
                     </Text>
                     <Text className="text-caption text-textMuted">
-                      We'll send a one-time code to your business email.
+                      {mode === 'signup'
+                        ? "We'll send a one-time code, then guide you through setting up your profile."
+                        : "We'll send a one-time code to your business email."}
                     </Text>
                   </View>
 

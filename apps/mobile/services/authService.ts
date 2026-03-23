@@ -1,10 +1,13 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import type { User } from '@/models';
 import { DEMO_MODE, DEMO_OTP_CODE } from '@/constants';
 import { trpc, setSessionToken, clearSessionToken } from './trpcClient';
 
+const DEMO_USER_KEY = '@nmq_demo_user';
+
 function demoUser(email: string): User {
   return {
-    id: `demo-user-${Date.now()}`,
+    id: `demo-user-${email.replace(/[^a-z0-9]/gi, '-')}`,
     email,
     name: email.split('@')[0],
     companyId: '',
@@ -29,7 +32,9 @@ export const authService = {
     if (DEMO_MODE) {
       await new Promise((r) => setTimeout(r, 500));
       if (otp === DEMO_OTP_CODE) {
-        return demoUser(email);
+        const user = demoUser(email);
+        await AsyncStorage.setItem(DEMO_USER_KEY, JSON.stringify(user));
+        return user;
       }
       return null;
     }
@@ -54,16 +59,20 @@ export const authService = {
 
   loginWithLinkedIn: async (): Promise<User | null> => {
     if (DEMO_MODE) {
-      // Emulate LinkedIn OAuth flow with brief delay
       await new Promise((r) => setTimeout(r, 800));
-      return demoUser('demo.linkedin@company.com');
+      const user = demoUser('demo.linkedin@company.com');
+      await AsyncStorage.setItem(DEMO_USER_KEY, JSON.stringify(user));
+      return user;
     }
     // TODO Phase 7: Implement LinkedIn OAuth via Better-Auth
     throw new Error('LinkedIn OAuth not yet implemented');
   },
 
   logout: async (): Promise<void> => {
-    if (DEMO_MODE) return;
+    if (DEMO_MODE) {
+      await AsyncStorage.removeItem(DEMO_USER_KEY);
+      return;
+    }
     try {
       await trpc.auth.signOut.mutate();
     } finally {
@@ -72,7 +81,13 @@ export const authService = {
   },
 
   getCurrentUser: async (): Promise<User | null> => {
-    if (DEMO_MODE) return null;
+    if (DEMO_MODE) {
+      try {
+        const stored = await AsyncStorage.getItem(DEMO_USER_KEY);
+        if (stored) return JSON.parse(stored) as User;
+      } catch { /* ignore */ }
+      return null;
+    }
     try {
       const session = await trpc.auth.getSession.query();
       if (session?.user) {

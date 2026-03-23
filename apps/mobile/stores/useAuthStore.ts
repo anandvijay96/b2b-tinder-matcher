@@ -1,6 +1,7 @@
 import type { User } from '@/models';
 import { authService } from '@/services';
 import { create } from 'zustand';
+import { useCompanyStore } from './useCompanyStore';
 
 interface AuthState {
   user: User | null;
@@ -83,6 +84,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     set({ isLoading: true });
     try {
       await authService.logout();
+      await useCompanyStore.getState().clearCompany();
     } finally {
       set({ user: null, isAuthenticated: false, isLoading: false, error: null });
     }
