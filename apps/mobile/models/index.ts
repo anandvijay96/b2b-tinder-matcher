@@ -20,8 +20,10 @@ export type {
 } from './MeetingSlot';
 export type { Message, MessageType } from './Message';
 export type {
+  AIScoreBreakdown,
   CandidateCompany,
   CandidateMatchReason,
+  MutualConnection,
   SwipeAction,
   SwipeCandidate,
   SwipeDirection,

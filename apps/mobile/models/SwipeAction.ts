@@ -30,6 +30,20 @@ export interface CandidateCompany {
   verificationBadges: string[];
   responseSpeed: string;
   geographies: string[];
+  mutualConnections?: MutualConnection[];
+  aiScoreBreakdown?: AIScoreBreakdown;
+}
+
+export interface MutualConnection {
+  type: 'event' | 'partner' | 'investor' | 'accelerator';
+  label: string;
+}
+
+export interface AIScoreBreakdown {
+  intentOverlap: number;
+  geoFit: number;
+  stageFit: number;
+  verificationBonus: number;
 }
 
 export interface CandidateMatchReason {

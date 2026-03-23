@@ -2,7 +2,7 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Tabs } from 'expo-router';
 import { ComponentProps } from 'react';
 import { Text, View } from 'react-native';
-import { useMatchStore, useChatStore } from '@/stores';
+import { useMatchStore, useChatStore, useNotificationStore } from '@/stores';
 
 function TabBarIcon(props: {
   name: ComponentProps<typeof FontAwesome>['name'];
@@ -40,6 +40,8 @@ export default function TabLayout() {
   const totalUnread = getTotalUnread();
   const getTotalUnreadMessages = useChatStore((s) => s.getTotalUnreadMessages);
   const totalUnreadMessages = getTotalUnreadMessages();
+  const getUnreadCount = useNotificationStore((s) => s.getUnreadCount);
+  const unreadNotifications = getUnreadCount();
 
   return (
     <Tabs
@@ -88,6 +90,18 @@ export default function TabLayout() {
             <View>
               <TabBarIcon name="comments" color={color} />
               <UnreadBadge count={totalUnreadMessages} />
+            </View>
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="notifications"
+        options={{
+          title: 'Activity',
+          tabBarIcon: ({ color }) => (
+            <View>
+              <TabBarIcon name="bell" color={color} />
+              <UnreadBadge count={unreadNotifications} />
             </View>
           ),
         }}

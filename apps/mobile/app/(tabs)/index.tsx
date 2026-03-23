@@ -6,11 +6,12 @@ import {
   PanResponder,
   Pressable,
   Text,
+  TextInput,
   View,
   ActivityIndicator,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { ThumbsUp, ThumbsDown, RotateCcw, Star, SlidersHorizontal } from 'lucide-react-native';
+import { ThumbsUp, ThumbsDown, RotateCcw, Star, SlidersHorizontal, Search, X } from 'lucide-react-native';
 import { useRouter } from 'expo-router';
 import * as Haptics from 'expo-haptics';
 import { SwipeCard, CompanyExpandModal, FiltersSheet } from '@/components/features';
@@ -39,15 +40,28 @@ export default function DiscoverScreen() {
 
   const [expandedCandidate, setExpandedCandidate] = useState<SwipeCandidate | null>(null);
   const [filtersVisible, setFiltersVisible] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [searchActive, setSearchActive] = useState(false);
+
+  const filteredCandidates = searchQuery.trim()
+    ? visibleCandidates.filter((c) => {
+        const q = searchQuery.toLowerCase();
+        return (
+          c.company.brandName.toLowerCase().includes(q) ||
+          c.company.industry.toLowerCase().includes(q) ||
+          c.company.hqLocation.toLowerCase().includes(q)
+        );
+      })
+    : visibleCandidates;
 
   const pan = useRef(new Animated.ValueXY()).current;
   const isAnimating = useRef(false);
 
   // Refs kept current every render — avoid stale closures inside PanResponder
   const topCandidateRef = useRef<SwipeCandidate | null>(null);
-  topCandidateRef.current = visibleCandidates[0] ?? null;
+  topCandidateRef.current = filteredCandidates[0] ?? null;
   const visibleCountRef = useRef(0);
-  visibleCountRef.current = visibleCandidates.length;
+  visibleCountRef.current = filteredCandidates.length;
   const handleSwipeRef = useRef(handleSwipe);
   handleSwipeRef.current = handleSwipe;
   const setExpandedRef = useRef(setExpandedCandidate);
@@ -172,28 +186,70 @@ export default function DiscoverScreen() {
     );
   }
 
-  const topCandidate = visibleCandidates[0] ?? null;
+  const topCandidate = filteredCandidates[0] ?? null;
 
   return (
     <SafeAreaView className="flex-1 bg-bgBase" edges={['top']}>
       {/* Header */}
-      <View className="flex-row items-center justify-between px-5 pt-2 pb-3">
-        <Text className="text-heading3 text-textPrimary font-bold">Discover</Text>
-        <View className="flex-row items-center gap-3">
-          <Pressable
-            onPress={() => setFiltersVisible(true)}
-            className="w-9 h-9 rounded-full bg-bgSurface border border-borderLight items-center justify-center"
-            hitSlop={8}
-          >
-            <SlidersHorizontal size={16} color="#1E3A5F" />
-          </Pressable>
-          <View className="flex-row items-center gap-1.5 bg-primary-light rounded-pill px-3 py-1.5">
-            <Text className="text-captionMedium text-primary font-semibold">
-              {dailySwipeCount}/{dailySwipeLimit}
-            </Text>
-            <Text className="text-small text-textSecondary">today</Text>
+      <View className="px-5 pt-2 pb-2">
+        {searchActive ? (
+          <View className="flex-row items-center gap-2">
+            <View className="flex-1 flex-row items-center bg-bgSurface border border-borderLight rounded-xl px-3 py-2 gap-2">
+              <Search size={16} color="#94A3B8" />
+              <TextInput
+                autoFocus
+                placeholder="Search by name, industry, location…"
+                placeholderTextColor="#94A3B8"
+                value={searchQuery}
+                onChangeText={setSearchQuery}
+                returnKeyType="search"
+                style={{ flex: 1, fontSize: 14, color: '#0F172A' }}
+              />
+              {searchQuery.length > 0 && (
+                <Pressable onPress={() => setSearchQuery('')} hitSlop={8}>
+                  <X size={14} color="#94A3B8" />
+                </Pressable>
+              )}
+            </View>
+            <Pressable
+              onPress={() => { setSearchActive(false); setSearchQuery(''); }}
+              hitSlop={8}
+            >
+              <Text className="text-caption text-primary font-semibold">Cancel</Text>
+            </Pressable>
           </View>
-        </View>
+        ) : (
+          <View className="flex-row items-center justify-between">
+            <Text className="text-heading3 text-textPrimary font-bold">Discover</Text>
+            <View className="flex-row items-center gap-2">
+              <Pressable
+                onPress={() => setSearchActive(true)}
+                className="w-9 h-9 rounded-full bg-bgSurface border border-borderLight items-center justify-center"
+                hitSlop={8}
+              >
+                <Search size={16} color="#1E3A5F" />
+              </Pressable>
+              <Pressable
+                onPress={() => setFiltersVisible(true)}
+                className="w-9 h-9 rounded-full bg-bgSurface border border-borderLight items-center justify-center"
+                hitSlop={8}
+              >
+                <SlidersHorizontal size={16} color="#1E3A5F" />
+              </Pressable>
+              <View className="flex-row items-center gap-1.5 bg-primary-light rounded-pill px-3 py-1.5">
+                <Text className="text-captionMedium text-primary font-semibold">
+                  {dailySwipeCount}/{dailySwipeLimit}
+                </Text>
+                <Text className="text-small text-textSecondary">today</Text>
+              </View>
+            </View>
+          </View>
+        )}
+        {searchQuery.trim() && (
+          <Text className="text-small text-textMuted mt-1.5">
+            {filteredCandidates.length} result{filteredCandidates.length !== 1 ? 's' : ''} for "{searchQuery}"
+          </Text>
+        )}
       </View>
 
       {/* Deck */}
@@ -203,36 +259,36 @@ export default function DiscoverScreen() {
             title="Daily limit reached"
             subtitle={`You've reviewed ${dailySwipeLimit} companies today. Come back tomorrow for more matches.`}
           />
-        ) : visibleCandidates.length === 0 ? (
+        ) : filteredCandidates.length === 0 ? (
           <EmptyState
-            title="You've seen everyone!"
-            subtitle="No more candidates for now. Check back later or adjust your filters."
-            actionLabel="Refresh"
-            onAction={refresh}
+            title={searchQuery.trim() ? 'No results found' : "You've seen everyone!"}
+            subtitle={searchQuery.trim() ? `No companies match "${searchQuery}". Try a different search.` : 'No more candidates for now. Check back later or adjust your filters.'}
+            actionLabel={searchQuery.trim() ? 'Clear Search' : 'Refresh'}
+            onAction={searchQuery.trim() ? () => setSearchQuery('') : refresh}
           />
         ) : (
           <View className="flex-1">
             {/* Back card (index 2) */}
-            {visibleCandidates[2] && (
+            {filteredCandidates[2] && (
               <View
                 style={{
                   position: 'absolute', top: 16, left: 0, right: 0, bottom: 0,
                   transform: [{ scale: 0.90 }, { translateY: 20 }],
                 }}
               >
-                <SwipeCard candidate={visibleCandidates[2]} isTopCard={false} />
+                <SwipeCard candidate={filteredCandidates[2]} isTopCard={false} />
               </View>
             )}
 
             {/* Middle card (index 1) */}
-            {visibleCandidates[1] && (
+            {filteredCandidates[1] && (
               <View
                 style={{
                   position: 'absolute', top: 8, left: 0, right: 0, bottom: 0,
                   transform: [{ scale: 0.95 }, { translateY: 10 }],
                 }}
               >
-                <SwipeCard candidate={visibleCandidates[1]} isTopCard={false} />
+                <SwipeCard candidate={filteredCandidates[1]} isTopCard={false} />
               </View>
             )}
 

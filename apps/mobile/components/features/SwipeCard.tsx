@@ -1,7 +1,7 @@
 import { View, Text, ScrollView, Pressable } from 'react-native';
-import { MapPin, Users, Zap, CheckCircle, ChevronUp } from 'lucide-react-native';
-import { Avatar, Badge, Pill } from '@/components/ui';
-import type { SwipeCandidate } from '@/models';
+import { MapPin, Users, Zap, CheckCircle, ChevronUp, Link2, Sparkles } from 'lucide-react-native';
+import { Avatar, Pill } from '@/components/ui';
+import type { AIScoreBreakdown, MutualConnection, SwipeCandidate } from '@/models';
 
 export interface SwipeCardProps {
   candidate: SwipeCandidate;
@@ -18,6 +18,64 @@ function VerificationDot({ count }: { count: number }) {
     <View className="flex-row items-center gap-1">
       <CheckCircle size={13} color="#0D9488" />
       <Text className="text-small text-accent font-medium">Verified</Text>
+    </View>
+  );
+}
+
+function ScoreBar({ label, value, color }: { label: string; value: number; color: string }) {
+  return (
+    <View className="gap-0.5">
+      <View className="flex-row items-center justify-between">
+        <Text className="text-small text-textMuted">{label}</Text>
+        <Text className="text-small font-semibold" style={{ color }}>{value}</Text>
+      </View>
+      <View className="h-1.5 bg-bgBase rounded-pill overflow-hidden">
+        <View className="h-full rounded-pill" style={{ width: `${(value / 40) * 100}%`, backgroundColor: color }} />
+      </View>
+    </View>
+  );
+}
+
+function AIScorePanel({ breakdown }: { breakdown: AIScoreBreakdown }) {
+  return (
+    <View className="bg-bgBase rounded-xl p-3 gap-2">
+      <View className="flex-row items-center gap-1.5 mb-1">
+        <Sparkles size={13} color="#7C3AED" />
+        <Text className="text-small text-textMuted font-semibold uppercase tracking-wider">AI Score Breakdown</Text>
+      </View>
+      <ScoreBar label="Intent Overlap" value={breakdown.intentOverlap} color="#1E3A5F" />
+      <ScoreBar label="Geo Fit" value={breakdown.geoFit} color="#0D9488" />
+      <ScoreBar label="Stage Fit" value={breakdown.stageFit} color="#F59E0B" />
+      <ScoreBar label="Verification Bonus" value={breakdown.verificationBonus} color="#22C55E" />
+    </View>
+  );
+}
+
+const MUTUAL_CONNECTION_COLORS: Record<MutualConnection['type'], { bg: string; text: string }> = {
+  event:       { bg: '#EFF6FF', text: '#1D4ED8' },
+  partner:     { bg: '#F0FDF4', text: '#15803D' },
+  investor:    { bg: '#FEF9C3', text: '#A16207' },
+  accelerator: { bg: '#FDF4FF', text: '#7E22CE' },
+};
+
+function MutualConnectionsRow({ connections }: { connections: MutualConnection[] }) {
+  if (connections.length === 0) return null;
+  return (
+    <View className="gap-1.5">
+      <View className="flex-row items-center gap-1.5">
+        <Link2 size={13} color="#94A3B8" />
+        <Text className="text-small text-textMuted font-semibold uppercase tracking-wider">Mutual Connections</Text>
+      </View>
+      <View className="flex-row flex-wrap gap-1.5">
+        {connections.map((c, i) => {
+          const { bg, text } = MUTUAL_CONNECTION_COLORS[c.type];
+          return (
+            <View key={i} style={{ backgroundColor: bg }} className="rounded-pill px-2.5 py-1">
+              <Text style={{ color: text }} className="text-small font-medium">{c.label}</Text>
+            </View>
+          );
+        })}
+      </View>
     </View>
   );
 }
@@ -111,6 +169,16 @@ export function SwipeCard({ candidate, isTopCard = false, scrollEnabled = false,
                 </Text>
               ))}
             </View>
+          )}
+
+          {/* AI Score Breakdown */}
+          {company.aiScoreBreakdown && (
+            <AIScorePanel breakdown={company.aiScoreBreakdown} />
+          )}
+
+          {/* Mutual Connections */}
+          {company.mutualConnections && company.mutualConnections.length > 0 && (
+            <MutualConnectionsRow connections={company.mutualConnections} />
           )}
 
           {/* Description */}

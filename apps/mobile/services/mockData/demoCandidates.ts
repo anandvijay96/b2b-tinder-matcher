@@ -1,6 +1,4 @@
-import type { SwipeCandidate } from '@/models';
-import type { Match } from '@/models';
-import type { Message } from '@/models';
+import type { SwipeCandidate, Match, Message } from '@/models';
 
 export const DEMO_CANDIDATES: SwipeCandidate[] = [
   {
@@ -19,6 +17,11 @@ export const DEMO_CANDIDATES: SwipeCandidate[] = [
       verificationBadges: ['identity-verified', 'documents-verified'],
       responseSpeed: 'fast',
       geographies: ['North America', 'Europe'],
+      mutualConnections: [
+        { type: 'event', label: 'SaaStr Annual 2025' },
+        { type: 'accelerator', label: 'Y Combinator S23' },
+      ],
+      aiScoreBreakdown: { intentOverlap: 38, geoFit: 28, stageFit: 18, verificationBonus: 8 },
     },
     matchReasons: [
       { icon: '🎯', label: 'High Intent Overlap', description: 'Their AI platform needs align with your consulting capabilities' },
@@ -43,6 +46,11 @@ export const DEMO_CANDIDATES: SwipeCandidate[] = [
       verificationBadges: ['identity-verified', 'documents-verified', 'premium-verified'],
       responseSpeed: 'fast',
       geographies: ['Europe', 'Asia Pacific'],
+      mutualConnections: [
+        { type: 'event', label: 'Davos ESG Summit 2025' },
+        { type: 'partner', label: 'Shared: SAP Ecosystem' },
+      ],
+      aiScoreBreakdown: { intentOverlap: 35, geoFit: 22, stageFit: 20, verificationBonus: 11 },
     },
     matchReasons: [
       { icon: '🌱', label: 'ESG Synergy', description: 'Strong alignment on sustainability goals and green tech' },
@@ -67,6 +75,10 @@ export const DEMO_CANDIDATES: SwipeCandidate[] = [
       verificationBadges: ['identity-verified'],
       responseSpeed: 'moderate',
       geographies: ['Europe', 'North America', 'Asia Pacific'],
+      mutualConnections: [
+        { type: 'event', label: 'Money20/20 Europe 2025' },
+      ],
+      aiScoreBreakdown: { intentOverlap: 34, geoFit: 26, stageFit: 18, verificationBonus: 7 },
     },
     matchReasons: [
       { icon: '💰', label: 'Payment Synergy', description: 'Their payment infra can power your platform transactions' },
@@ -91,6 +103,11 @@ export const DEMO_CANDIDATES: SwipeCandidate[] = [
       verificationBadges: ['identity-verified', 'documents-verified'],
       responseSpeed: 'fast',
       geographies: ['North America', 'Europe', 'Middle East'],
+      mutualConnections: [
+        { type: 'investor', label: 'Shared investor: Sequoia Capital' },
+        { type: 'event', label: 'AWS re:Invent 2024' },
+      ],
+      aiScoreBreakdown: { intentOverlap: 36, geoFit: 27, stageFit: 19, verificationBonus: 8 },
     },
     matchReasons: [
       { icon: '☁️', label: 'Infrastructure Fit', description: 'Their cloud platform perfectly hosts your SaaS workloads' },
@@ -115,6 +132,7 @@ export const DEMO_CANDIDATES: SwipeCandidate[] = [
       verificationBadges: ['identity-verified'],
       responseSpeed: 'moderate',
       geographies: ['Europe', 'South America', 'Africa'],
+      aiScoreBreakdown: { intentOverlap: 28, geoFit: 20, stageFit: 22, verificationBonus: 8 },
     },
     matchReasons: [
       { icon: '👥', label: 'Talent Pipeline', description: 'Access pre-vetted engineering talent for your growing team' },
@@ -139,6 +157,10 @@ export const DEMO_CANDIDATES: SwipeCandidate[] = [
       verificationBadges: ['identity-verified', 'documents-verified', 'premium-verified'],
       responseSpeed: 'fast',
       geographies: ['North America', 'Europe'],
+      mutualConnections: [
+        { type: 'accelerator', label: 'Techstars Toronto 2024' },
+      ],
+      aiScoreBreakdown: { intentOverlap: 33, geoFit: 25, stageFit: 17, verificationBonus: 11 },
     },
     matchReasons: [
       { icon: '🔐', label: 'Compliance Synergy', description: 'Their governance platform ensures your data practices are compliant' },
@@ -163,6 +185,11 @@ export const DEMO_CANDIDATES: SwipeCandidate[] = [
       verificationBadges: ['identity-verified', 'documents-verified'],
       responseSpeed: 'moderate',
       geographies: ['Asia Pacific', 'Middle East'],
+      mutualConnections: [
+        { type: 'event', label: 'Gartner Supply Chain 2025' },
+        { type: 'partner', label: 'Shared: DHL Partner Network' },
+      ],
+      aiScoreBreakdown: { intentOverlap: 30, geoFit: 24, stageFit: 20, verificationBonus: 8 },
     },
     matchReasons: [
       { icon: '🚚', label: 'Logistics Network', description: 'Expand your delivery capabilities across APAC with their platform' },
@@ -187,6 +214,11 @@ export const DEMO_CANDIDATES: SwipeCandidate[] = [
       verificationBadges: ['identity-verified', 'documents-verified', 'premium-verified'],
       responseSpeed: 'fast',
       geographies: ['North America'],
+      mutualConnections: [
+        { type: 'investor', label: 'Shared investor: a16z Bio' },
+        { type: 'event', label: 'HIMSS Annual Conference 2025' },
+      ],
+      aiScoreBreakdown: { intentOverlap: 31, geoFit: 22, stageFit: 20, verificationBonus: 11 },
     },
     matchReasons: [
       { icon: '🏥', label: 'Healthcare Innovation', description: 'AI health-tech is a high-growth vertical for B2B partnerships' },
@@ -194,6 +226,121 @@ export const DEMO_CANDIDATES: SwipeCandidate[] = [
       { icon: '⭐', label: 'Top Rated', description: 'Premium-verified with fastest response speed in healthcare' },
     ],
     matchScore: 84,
+  },
+  {
+    company: {
+      id: 'demo-c9',
+      brandName: 'ScaleOps',
+      legalName: 'ScaleOps Inc.',
+      industry: 'RevOps & Sales Intelligence',
+      hqLocation: 'New York, NY',
+      employeeRange: '11-50',
+      description: 'AI-driven revenue operations platform that unifies CRM data, pipeline forecasting, and sales coaching in a single workspace for B2B sales teams.',
+      offerings: ['Pipeline Intelligence', 'CRM Data Enrichment', 'AI Sales Coaching', 'Revenue Forecasting'],
+      needs: ['CRM Integration Partners', 'Enterprise Pilots', 'Channel Resellers'],
+      offeringSummary: 'Revenue operations platform with AI pipeline intelligence, CRM enrichment, and sales coaching.',
+      needsSummary: 'Seeking CRM integration partners and enterprise clients to expand market coverage.',
+      verificationBadges: ['identity-verified', 'documents-verified'],
+      responseSpeed: 'fast',
+      geographies: ['North America', 'Europe'],
+      mutualConnections: [
+        { type: 'event', label: 'Dreamforce 2025' },
+        { type: 'accelerator', label: 'NYC VC Cohort 2024' },
+      ],
+      aiScoreBreakdown: { intentOverlap: 32, geoFit: 28, stageFit: 19, verificationBonus: 8 },
+    },
+    matchReasons: [
+      { icon: '📊', label: 'RevOps Fit', description: 'Their pipeline intelligence directly amplifies your sales output' },
+      { icon: '🔌', label: 'CRM Synergy', description: 'Deep Salesforce and HubSpot integrations — zero friction adoption' },
+      { icon: '🚀', label: 'Startup Stage', description: 'Lean team, fast decisions, strong founder-to-founder energy' },
+    ],
+    matchScore: 87,
+  },
+  {
+    company: {
+      id: 'demo-c10',
+      brandName: 'CyberShield AI',
+      legalName: 'CyberShield AI Ltd.',
+      industry: 'Cybersecurity',
+      hqLocation: 'Tel Aviv, Israel',
+      employeeRange: '51-200',
+      description: 'Next-gen threat detection platform using behavioral AI to protect enterprise infrastructure. 99.97% detection rate with under 0.1% false positives.',
+      offerings: ['Behavioral Threat Detection', 'Zero-Day Attack Prevention', 'SOC Automation', 'Threat Intelligence Feed'],
+      needs: ['MSSP Partners', 'Enterprise Sales', 'US Market Expansion'],
+      offeringSummary: 'AI-powered threat detection with zero-day prevention, SOC automation, and real-time threat intelligence.',
+      needsSummary: 'Seeking MSSP partners and enterprise sales channels to accelerate US market expansion.',
+      verificationBadges: ['identity-verified', 'documents-verified', 'premium-verified'],
+      responseSpeed: 'fast',
+      geographies: ['Europe', 'North America', 'Middle East'],
+      mutualConnections: [
+        { type: 'event', label: 'RSA Conference 2025' },
+        { type: 'investor', label: 'Shared investor: Insight Partners' },
+      ],
+      aiScoreBreakdown: { intentOverlap: 36, geoFit: 24, stageFit: 18, verificationBonus: 11 },
+    },
+    matchReasons: [
+      { icon: '🛡️', label: 'Security Partnership', description: 'Bundle their AI threat detection with your SaaS for enterprise deals' },
+      { icon: '🌐', label: 'US Expansion Ready', description: 'They need exactly what you offer — market access and distribution' },
+      { icon: '🏆', label: 'Award-Winning Tech', description: 'Gartner Cool Vendor 2024 — credibility multiplier for co-sells' },
+    ],
+    matchScore: 89,
+  },
+  {
+    company: {
+      id: 'demo-c11',
+      brandName: 'Nexara Commerce',
+      legalName: 'Nexara Commerce Pte. Ltd.',
+      industry: 'B2B E-Commerce',
+      hqLocation: 'Dubai, UAE',
+      employeeRange: '201-500',
+      description: 'Wholesale B2B marketplace for MENA and South Asia enabling manufacturers to connect directly with buyers, cutting middlemen and reducing procurement costs by 40%.',
+      offerings: ['B2B Wholesale Marketplace', 'Procurement Automation', 'Trade Finance', 'Supplier Verification Network'],
+      needs: ['Logistics Partners', 'Payment Gateway', 'European Market Entry'],
+      offeringSummary: 'B2B wholesale marketplace with procurement automation, trade finance, and supplier verification.',
+      needsSummary: 'Seeking logistics and payment partners to expand into European markets.',
+      verificationBadges: ['identity-verified', 'documents-verified'],
+      responseSpeed: 'moderate',
+      geographies: ['Middle East', 'Asia Pacific', 'Europe'],
+      mutualConnections: [
+        { type: 'event', label: 'GITEX Global 2025' },
+      ],
+      aiScoreBreakdown: { intentOverlap: 29, geoFit: 26, stageFit: 19, verificationBonus: 8 },
+    },
+    matchReasons: [
+      { icon: '🛒', label: 'Commerce Infrastructure', description: 'Their marketplace is hungry for your payment and logistics stack' },
+      { icon: '🌍', label: 'MENA Gateway', description: 'Unblock access to 200M+ buyers in Middle East and South Asia' },
+      { icon: '💸', label: 'Trade Finance Ready', description: 'Built-in financing means faster deal cycles for both sides' },
+    ],
+    matchScore: 82,
+  },
+  {
+    company: {
+      id: 'demo-c12',
+      brandName: 'EduStack Pro',
+      legalName: 'EduStack Professional Learning Corp.',
+      industry: 'Enterprise Learning & Development',
+      hqLocation: 'Sydney, Australia',
+      employeeRange: '51-200',
+      description: 'Corporate upskilling platform delivering AI-personalized learning paths for technical and leadership skills. 3,000+ content modules from top universities and industry experts.',
+      offerings: ['Personalized Learning Paths', 'Skills Gap Analysis', 'Manager Development Program', 'Compliance Training Automation'],
+      needs: ['HR Tech Integrations', 'Content Partners', 'APAC Enterprise Clients'],
+      offeringSummary: 'AI-personalized corporate learning with skills gap analysis, leadership programs, and compliance automation.',
+      needsSummary: 'Seeking HR tech integration partners and enterprise clients to scale across APAC.',
+      verificationBadges: ['identity-verified'],
+      responseSpeed: 'moderate',
+      geographies: ['Asia Pacific', 'Europe'],
+      mutualConnections: [
+        { type: 'partner', label: 'Shared: Workday Partner Network' },
+        { type: 'accelerator', label: 'Antler AU Cohort 2024' },
+      ],
+      aiScoreBreakdown: { intentOverlap: 27, geoFit: 20, stageFit: 22, verificationBonus: 7 },
+    },
+    matchReasons: [
+      { icon: '🎓', label: 'L&D Fit', description: 'Upskill your team on their platform — and resell to your clients' },
+      { icon: '🔗', label: 'HRIS Integration', description: 'Plugs directly into Workday and SAP SuccessFactors ecosystems' },
+      { icon: '📈', label: 'APAC Growth', description: 'Mutual expansion interest in fast-growing Pacific markets' },
+    ],
+    matchScore: 76,
   },
 ];
 
